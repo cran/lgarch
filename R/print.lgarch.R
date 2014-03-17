@@ -1,0 +1,35 @@
+print.lgarch <-
+function(x, arma.version=FALSE, ...)
+{
+  vcovmat <- vcov(x, arma.version=arma.version,
+    full.matrix=TRUE)
+  if(is.null(vcovmat)){
+    vcovmat <- matrix(NA, length(x$par), length(x$par))
+  }
+  if(arma.version){
+    out1 <- rbind(x$par.arma, sqrt(diag(vcovmat)))
+  }else{
+    out1 <- rbind(x$par, sqrt(diag(vcovmat)))
+  }
+  rownames(out1) <- c("Estimate:", "Std. Error:")
+  out2 <- as.data.frame(matrix(NA,4,1))
+  out2[1,1] <- as.character(round(logLik.lgarch(x, arma=FALSE), digits=3))
+  out2[2,1] <- as.character(round(x$objective.arma, digits=3))
+  out2[3,1] <- as.character(round(x$aux$ynonzeron, digits=0))
+  out2[4,1] <- as.character(round(x$aux$yzeron, digits=0))
+  rownames(out2) <-   c("Log-likelihood (log-garch):",
+    "Log-likelihood (arma):", "No. of non-zeros:",
+    "No. of zeros:")
+  colnames(out2) <- ""
+  cat("\n")
+  cat("Date:", x$date, "\n")
+  cat("Message (nlminb):", x$message, "\n")
+  cat("No. of observations:", x$aux$n, "\n")
+#  cat("Sample:", object$aux$y.index[1], "to",
+#    object$aux$y.index[object$aux$n], "\n")
+  cat("\n")
+  cat("Coefficients:\n")
+  print(out1)
+  print(out2)
+  cat("\n")
+}

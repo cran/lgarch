@@ -1,0 +1,168 @@
+lgarch <-
+function(y, arch=1, garch=1, xreg=NULL,
+  initial.values=NULL,
+  backcast.values=list(lny2=NULL, lnz2=NULL, xreg=NULL),
+  lower=NULL, upper=NULL, nlminb.control=list(), vcov=TRUE,
+  logl.penalty=NULL, solve.tol=.Machine$double.eps,
+  c.code=TRUE)
+{
+
+  #arguments:
+  if(arch < garch) stop("WARNING: garch order cannot be greater than arch order")
+  if(arch > 1) stop("WARNING: arch order cannt be greater than 1 in the current version of lgarch")
+  #check arch
+  #check garch
+  store.aux=TRUE #allow this one to be FALSE in the future?
+
+  #zoo:
+  y <- as.zoo(y)
+  y <- na.trim(y)
+  y.index <- index(y)
+  y <- coredata(y)
+  if(!is.null(xreg)) xreg <- cbind(coredata(xreg))
+
+  #begin aux list:
+  aux <- list()
+  aux$y <- y
+  aux$y.index <- y.index
+  aux$n <- length(y)
+  aux$yzero <- as.numeric(y != 0)
+  aux$ynonzeron <- sum(aux$yzero)
+  aux$yzeron <- aux$n - aux$ynonzeron
+  if(aux$yzeron > 0) aux$yzerowhere <- which(y == 0)
+  y2 <- y^2
+  if(aux$yzeron > 0){
+    miny2 <- min(y2[-aux$yzerowhere])
+    y2[aux$yzerowhere] <- miny2
+    lny2 <- log(y2)
+    aux$lny2 <- log(y2)
+    aux$Elny2 <- mean(aux$lny2[-aux$yzerowhere])
+  }else{
+    aux$lny2 <- log(y2)
+    aux$Elny2 <- mean(aux$lny2)
+  }
+
+  #orders:
+  aux$maxpq <- max(arch,garch)
+  aux$nmaxpq <- aux$n + aux$maxpq
+  aux$ar <- aux$maxpq
+  aux$ma <- garch
+  if(aux$ar>0){ aux$ar.indx <- 2:c(aux$ar+1) }else{ aux$ar.indx <- 0 }
+  if(aux$ma>0){
+    aux$ma.indx <- c(max(aux$ar.indx)+1):c(max(aux$ar.indx)+aux$ma)
+  }else{
+    aux$ma.indx <- 0
+  }
+  if(is.null(xreg)){
+    aux$xreg.k <- 0
+  }else{
+    aux$xreg <- xreg
+    aux$xreg.k <- ncol(aux$xreg)
+    aux$xreg.indx <- c(max(1,aux$ma.indx)+1):c(max(1,aux$ma.indx)+aux$xreg.k)
+  }
+  aux$sigma2u.indx <- 1 + aux$ar + aux$ma + aux$xreg.k + 1
+
+  #initial values:
+  if(is.null(initial.values)){
+    if(is.null(xreg)){
+      xreg.initvals <- numeric(0)
+      xregMean <- 0
+    }else{
+      xreg.initvals <- rep(0.01, aux$xreg.k)
+      xregMean <- mean(aux$xreg %*% xreg.initvals)
+    }
+    ma.initvals <- rep(-0.8/aux$ma, aux$ma)
+    ar.initvals <- rep(0.9/aux$ar, aux$ar)
+    constant <- (1-sum(ar.initvals))*aux$Elny2 - xregMean
+    sigma2u <- 4.94
+    initial.values <- c(constant, ar.initvals, ma.initvals,
+      xreg.initvals, sigma2u)
+  }
+  aux$initial.values.arma <- initial.values
+  #to do: check initial values for stability?
+
+  #upper bounds:
+  if(is.null(upper)){
+    upper <- c(Inf, rep(1-.Machine$double.eps,aux$ar),
+      rep(1-.Machine$double.eps,aux$ma), rep(Inf, aux$xreg.k), Inf)
+    aux$upper <- upper
+  }
+
+  #lower bounds:
+  if(is.null(lower)){
+    lower <- c(-Inf, rep(.Machine$double.eps-1,aux$ar),
+      rep(.Machine$double.eps-1,aux$ma), rep(-Inf, aux$xreg.k), 0)
+    aux$lower <- lower
+    }
+
+  #misc:
+  aux$c.code <- c.code
+  aux$solve.tol <- solve.tol
+  aux$verboseRecursion <- FALSE
+  aux$yzeroadj <- c(rep(1,max(1,aux$maxpq)), aux$yzero)
+  aux$zerosaux <- rep(0,max(aux$nmaxpq, aux$n+1))
+  if(is.null(logl.penalty)){
+    aux$logl.penalty <- lgarchLogl(initial.values, aux)
+  }else{
+    aux$logl.penalty <- logl.penalty
+  }
+
+  #estimate:
+  objective.f <- function(pars, x=aux){ -lgarchLogl(pars,x) }
+  est <- nlminb(initial.values, objective.f, lower=lower,
+    upper=upper, control=nlminb.control)
+  est$objective <- -est$objective
+  names(est)[2] <- "objective.arma"
+
+  #parameters:
+  uadj <- lgarchRecursion1(as.numeric(est$par), aux)
+  if(aux$yzeron > 0){
+    uadj <- uadj[-aux$yzerowhere]
+  }
+  Elnz2 <- -log(mean(exp(uadj - mean(uadj))))
+  par.lgarch <- Elnz2
+  namesLgarch <- "Elnz2"
+  par.arma <- est$par
+  namesArma <- "sigma2u"
+  if(aux$xreg.k > 0){
+    namesArma <- c(paste("xreg",1:aux$xreg.k,sep=""), namesArma)
+    namesLgarch <- c(paste("xreg",1:aux$xreg.k,sep=""), namesLgarch)
+    par.lgarch <- c(est$par[aux$xreg.indx], par.lgarch)
+  }
+  if(aux$ma > 0){
+    namesArma <- c(paste("ma",1:aux$ma,sep=""), namesArma)
+    namesLgarch <- c(paste("garch",1:aux$ma,sep=""), namesLgarch)
+    par.lgarch <- c(-est$par[aux$ma.indx], par.lgarch)
+  }
+  if(aux$ar > 0){
+    namesArma <- c(paste("ar",1:aux$ar,sep=""), namesArma)
+    namesLgarch <- c(paste("arch",1:aux$ar,sep=""), namesLgarch)
+    par.tmp <- c(est$par[aux$ma.indx], rep(0, aux$ar-aux$ma))
+    par.lgarch <- c(est$par[aux$ar.indx]+par.tmp, par.lgarch)
+  }
+  namesArma <- c("constant", namesArma)
+  names(par.arma) <- namesArma
+  namesLgarch <- c("constant", namesLgarch)
+  const.lgarch <- est$par[1] - (1+sum(est$par[aux$ma.indx]))*Elnz2
+  par.lgarch <- c(const.lgarch,par.lgarch)
+  names(par.lgarch) <- namesLgarch
+  est$par <- par.lgarch
+  est <- c(list(date=date(), par.arma=par.arma), est)
+
+  #vcov matrix:
+  if(vcov){
+    hessian.arma <- -optimHess(as.numeric(par.arma), objective.f)
+    colnames(hessian.arma) <- namesArma
+    rownames(hessian.arma) <- namesArma
+    vcov.arma <- solve(-hessian.arma, tol=solve.tol)
+    est <- c(list(hessian.arma=hessian.arma,
+      vcov.arma=vcov.arma), est)
+  }
+
+  #out:
+  if(store.aux==TRUE){
+    est <- c(list(aux=aux),est)
+  }
+  class(est) <- "lgarch"
+  return(est)
+}

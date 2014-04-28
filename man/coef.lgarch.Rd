@@ -4,6 +4,7 @@
 \alias{logLik.lgarch}
 \alias{print.lgarch}
 \alias{residuals.lgarch}
+\alias{rss.lgarch}
 \alias{vcov.lgarch}
 
 \title{ Extraction methods for 'lgarch' objects }
@@ -17,6 +18,7 @@ Extraction methods for objects of class 'lgarch' (i.e. the result of estimating 
 \method{logLik}{lgarch}(object, arma = FALSE, ...)
 \method{print}{lgarch}(x, arma.version = FALSE, ...)
 \method{residuals}{lgarch}(object, arma = FALSE, ...)
+\method{rss}{lgarch}(object, ...)
 \method{vcov}{lgarch}(object, arma.version = FALSE, full.matrix = FALSE, ...)
 }
 
@@ -38,11 +40,12 @@ Extraction methods for objects of class 'lgarch' (i.e. the result of estimating 
   \item{logLik:}{The value of the log-likelihood (contributions at zeros excluded) at the maximum}
   \item{print:}{Prints the most important parts of the estimation results}
   \item{residuals:}{A \code{\link{zoo}} object}
+  \item{rss:}{Residual Sum of Squares of the estimated ARMA representation (zeros excluded)}
   \item{vcov:}{the variance-covariance matrix}
 }
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
-\seealso{ \code{\link{lgarch}} and \code{\link{lgarchSim}} }
+\seealso{ \code{\link{lgarch}} }
 
 \examples{
 ##simulate 500 observations w/default parameter values:
@@ -82,3 +85,5 @@ plot(myhat)
 }
 
 \keyword{Statistical Models}
+\keyword{Time Series}
+\keyword{Financial Econometrics}

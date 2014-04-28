@@ -1,17 +1,17 @@
 \name{lgarch}
 \alias{lgarch}
 
-\title{ Estimate log-GARCH model }
+\title{ Estimate a log-GARCH model }
 
 \description{
-Fits a log-GARCH model to a univariate time-series by Gaussian Quasi Maximum Likelihood (QML) estimation via the ARMA representation, see Sucarrat, Gronneberg and Escribano (2013). Zero-values on y are treated as missing values, as suggested in Sucarrat and Escribano (2013). Estimation is via the \code{\link{nlminb}} function, whereas a numerical estimate of the Hessian is obtained with \code{\link{optimHess}} for the computation of the variance-covariance matrix
+Fit a log-GARCH model by Gaussian Quasi Maximum Likelihood (QML) or Nonlinear Least Squares (NLS) via the ARMA representation, see Sucarrat, Gronneberg and Escribano (2013). Zero-values on y are treated as missing values, as suggested in Sucarrat and Escribano (2013). Estimation is via the \code{\link{nlminb}} function, whereas a numerical estimate of the Hessian is obtained with \code{\link{optimHess}} for the computation of the variance-covariance matrix
 }
 
 \usage{
 lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
   backcast.values = list(lny2 = NULL, lnz2 = NULL, xreg = NULL), lower = NULL,
-  upper = NULL, nlminb.control = list(), vcov = TRUE, logl.penalty = NULL,
-  solve.tol = .Machine$double.eps, c.code = TRUE)
+  upper = NULL, nlminb.control = list(), vcov = TRUE, method="ml",
+  objective.penalty = NULL, solve.tol = .Machine$double.eps, c.code = TRUE)
 }
 
 \arguments{
@@ -25,14 +25,13 @@ lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
   \item{upper}{NULL (default) or a vector with the upper bounds of the parameter space. If NULL, then the values are automatically chosen}
   \item{nlminb.control}{list of control options passed on to the \code{\link{nlminb}} optimiser}
   \item{vcov}{logical. If TRUE (default), then the variance-covariance matrix is computed. This is needed for subsequent extraction of the variance-covariance matrix. The FALSE options makes estimation faster, but the variance-covariance matrix cannot be extracted subsequently}
-  \item{logl.penalty}{NULL (default) or a numeric value. If NULL, then the log-likelihood value associated with the initial values is used. Sometimes estimation can result in NA and/or +/-Inf values, which are fatal for simulations. The value logl.penalty is the value returned by the log-likelihood function \code{\link{lgarchLogl}} in the presence of NA or +/-Inf values}
+  \item{method}{Estimation method, either "ml" (default), i.e. Gaussian QML, or "ls", i.e. Nonlinear Least Squares}
+  \item{objective.penalty}{NULL (default) or a numeric value. If NULL, then the log-likelihood value associated with the initial values is used. Sometimes estimation can result in NA and/or +/-Inf values, which are fatal for simulations. The value objective.penalty is the value returned by the log-likelihood function \code{\link{lgarchObjective}} in the presence of NA or +/-Inf values}
   \item{solve.tol}{The function \code{\link{solve}} is used for the inversion of the Hessian in computing the variance-covariance matrix. The value solve.tol is passed on to \code{\link{solve}} and is the tolerance for detecting linear dependencies in the columns}
   \item{c.code}{logical. TRUE (default) is (much) faster since it makes use of compiled C-code}
 }
 
-\value{
-Returns a list of class 'lgarch'
-}
+\value{ A list of class 'lgarch' }
 
 \references{
 Sucarrat and Escribano (2013), 'Unbiased QML Estimation of Log-GARCH Models in the Presence of Zero Returns', MPRA Paper 50699: \url{http://mpra.ub.uni-muenchen.de/50699/} \cr
@@ -85,3 +84,5 @@ plot(myhat)
 }
 
 \keyword{Statistical Models}
+\keyword{Time Series}
+\keyword{Financial Econometrics}

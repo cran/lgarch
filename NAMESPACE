@@ -1,6 +1,6 @@
 useDynLib(lgarch)
 import(zoo)
-export("glag", "lgarchSim", "lgarchRecursion1", "lgarchLogl", "lgarch")
+export("glag", "rmnorm", "lgarchSim", "mlgarchSim", "lgarchRecursion1", "lgarchObjective", "lgarch", "rss.lgarch")
 S3method("coef", "lgarch")
 S3method("fitted", "lgarch")
 S3method("logLik", "lgarch")

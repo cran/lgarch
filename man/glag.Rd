@@ -1,10 +1,10 @@
 \name{glag}
 \alias{glag}
 
-\title{ Lag vector }
+\title{ Lag vector or matrix}
 
 \description{
-Similar to the \code{\link{lag}} function from the stats package, but glag enables padding (e.g. NAs or 0s) of the lost entries. NOTE: contrary to \code{\link{lag}} the glag function can only be applied to vectors
+Similar to the \code{\link{lag}} function from the stats package, but glag enables padding (e.g. NAs or 0s) of the lost entries.
 }
 
 \usage{
@@ -35,3 +35,5 @@ xlag1 <- glag(x, pad=TRUE)
 }
 
 \keyword{Statistical Models}
+\keyword{Time Series}
+\keyword{Financial Econometrics}

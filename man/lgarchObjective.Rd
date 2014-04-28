@@ -1,12 +1,12 @@
-\name{lgarchLogl}
-\alias{lgarchLogl}
+\name{lgarchObjective}
+\alias{lgarchObjective}
 \alias{lgarchRecursion1}
 \title{Auxiliary functions}
 \description{
-lgarchLogl and lgarchRecursion1 are auxiliary functions called by \code{\link{lgarch}}, and are not intended to be used by the average user.
+lgarchObjective and lgarchRecursion1 are auxiliary functions called by \code{\link{lgarch}}, and are not intended to be used by the average user.
 }
 \usage{
-lgarchLogl(pars, aux)
+lgarchObjective(pars, aux)
 lgarchRecursion1(pars, aux)
 }
 \arguments{
@@ -25,3 +25,5 @@ Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univaria
 \seealso{ \code{\link{lgarch}} }
 
 \keyword{Statistical Models}
+\keyword{Time Series}
+\keyword{Financial Econometrics}

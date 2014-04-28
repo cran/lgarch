@@ -12,9 +12,10 @@ function(object, arma.version=FALSE,
     }else{
 
       #make vcov.lgarch matrix:
-      vcov.lgarch <- matrix(NA,nrow(vcov.arma), nrow(vcov.arma))
+      vcov.lgarch <- matrix(NA,length(object$par),
+        length(object$par))
       colnames(vcov.lgarch) <- names(object$par)
-      rownames(vcov.lgarch) <- colnames(vcov.lgarch)
+      rownames(vcov.lgarch) <- names(object$par)
 
       if(is.null(object$aux)){
         cat(" Auxiliary list 'aux' not stored, vcov cannot be extracted")
@@ -32,6 +33,8 @@ function(object, arma.version=FALSE,
             covalphabeta <- -vcov.arma[2,3] - vcov.arma[3,3]
             vcov.lgarch[2,3] <- covalphabeta
             vcov.lgarch[3,2] <- covalphabeta
+          }else{
+            vcov.lgarch[2,2] <- vcov.arma[2,2]
           } #end if(..diff==0)
         } #end if(..ar > 0)
 
@@ -59,7 +62,7 @@ function(object, arma.version=FALSE,
         expuadj <- exp(uadj)
         uexpuadj <- uadj*exp(uadj)
         avaruadj <- var(expuadj)/mean(expuadj)^2 + var(uadj) - 2*mean(uexpuadj)/mean(expuadj)
-        vcov.lgarch[nrow(vcov.arma), nrow(vcov.arma)] <- avaruadj/length(uadj)
+        vcov.lgarch[NROW(vcov.lgarch), NCOL(vcov.lgarch)] <- avaruadj/length(uadj)
 
       } #end if(is.null(object$aux))else(..)
 
@@ -67,7 +70,7 @@ function(object, arma.version=FALSE,
       if(full.matrix){
         result <- vcov.lgarch
       }else{
-        vcov.lgarch <- vcov.lgarch[-NROW(vcov.lgarch),-NROW(vcov.lgarch)]
+        vcov.lgarch <- vcov.lgarch[-NROW(vcov.lgarch),-NCOL(vcov.lgarch)]
         vcov.lgarch <- vcov.lgarch[-1,-1]
         result <- vcov.lgarch
       }

@@ -18,7 +18,7 @@ lgarchSim(n, constant = 0, arch = 0.05, garch = 0.9, xreg = NULL,
   \item{arch}{a vector with the arch coefficients}
   \item{garch}{a vector with the garch coefficients}
   \item{xreg}{a vector or a matrix with the conditioning variables}
-  \item{backcast.values}{backcast values for the recursion (chosen automatically when NULL)}
+  \item{backcast.values}{backcast values for the recursion (chosen automatically if NULL)}
   \item{check.stability}{logical. If TRUE (default) then the roots of arch+garch are checked for stability}
   \item{innovations}{Etiher NULL (default) or a vector of length n with the standardised errors (i.e. z). If NULL, then the innovations are N(0,1)}
   \item{verbose}{logical. If FALSE (default), then only the vector y is returned. If TRUE, then a matrix with all the output is returned}
@@ -33,7 +33,7 @@ Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univaria
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
 
-\seealso{ \code{\link{lgarch}}, \code{\link{zoo}} }
+\seealso{ \code{\link{mlgarchSim}}, \code{\link{lgarch}}, \code{\link{zoo}} }
 \examples{
 ##simulate 500 observations w/default parameter values:
 set.seed(123)
@@ -62,3 +62,5 @@ y <- lgarchSim(500, xreg=0.05*zneglagged, innovations=z)
 }
 
 \keyword{Statistical Models}
+\keyword{Time Series}
+\keyword{Financial Econometrics}

@@ -69,6 +69,10 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   #lnsigma2:
   if(is.null(backcast.values$lnsigma2)){
     Elnsigma2 <- (constant+sum(arch)*Elnz2+xregMean)/(1-sum(phi))
+    if(abs(Elnsigma2)==Inf){
+      mssg <- paste("NOTE: The initial value of lnsigma2 is Inf")
+      print(mssg)
+    }
     lnsigma2 <- c(rep(Elnsigma2,maxpq),rep(0,n))
   }else{
     lnsigma2 <- c(backcast.values$lnsigma2,rep(0,n))

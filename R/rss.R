@@ -1,6 +1,7 @@
-rss.lgarch <-
+rss <-
 function(object, ...)
 {
+  if(class(object)!="lgarch") stop("object does not belong to the lgarch class")
   if(object$aux$method=="ls"){
     result <- object$objective
   }else{

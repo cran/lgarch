@@ -1,40 +1,40 @@
 \name{rmnorm}
 \alias{rmnorm}
 
-\title{ Multivariate normal random number generation }
-
-\description{Similar to the \code{\link{rmnorm}} function from the mnormt package, but slightly faster.}
-
-\usage{
-rmnorm(n, mean = NULL, vcov = 1)
+\title{
+Random number generation from the multivariate normal distribution
 }
+\description{
+This function is a speed-optimised version of the \code{\link{rmnorm}} function from the mnormt package of Adelchi Azzalini (2013).
+}
+
+\usage{rmnorm(n, mean = NULL, vcov = 1)}
 
 \arguments{
-  \item{n}{number of observations}
-  \item{mean}{vector of means}
-  \item{vcov}{variance-covariance matrix}
+  \item{n}{integer, the number of observations to generate}
+  \item{mean}{numeric vector, i.e. the mean values}
+  \item{vcov}{numeric matrix, i.e. the variance-covariance matrix}
 }
+
 \details{Empty}
-\value{A matrix with the random numbers}
+
+\value{A matrix of n rows}
+
+\references{
+Adelchi Azzalini (2013): 'mnormt: The multivariate normal and t distributions', R package version 1.4-7, \url{http://CRAN.R-project.org/package=mnormt}
+}
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
 
-\seealso{
-\code{\link{mlgarchSim}}, \code{\link{rnorm}}, \code{\link{chol}}
-}
 \examples{
-##generate from 2-dimensional multivariate normal
-##(standardised and independent variables):
-y <- rmnorm(100, vcov=diag(c(1,1)))
+##generate from univariate standardised normal:
+z1 <- rmnorm(100)
 
-##generate from 2-dimensional multivariate normal
-##(standardised and dependent variables):
-y <- rmnorm(100, vcov=cbind(c(1,0.5),c(0.5,1)))
+##generate from bivariate, independent standardised normal:
+z2 <- rmnorm(100, vcov=diag(c(1,1)))
 
-##generate from 3-dimensional multivariate normal
-##(independent variables with variances 1, 2 and 3):
-y <- rmnorm(100, vcov=diag(c(1,2,3)))
-
+##generate from bivariate, dependent standardised normal:
+z3 <- rmnorm(100, vcov=cbind(c(1,0.3),c(0.3,1)))
 }
 
 \keyword{Statistical Models}

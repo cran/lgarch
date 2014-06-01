@@ -3,21 +3,27 @@ function(y, arch=1, garch=1, xreg=NULL,
   initial.values=NULL,
   backcast.values=list(lny2=NULL, lnz2=NULL, xreg=NULL),
   lower=NULL, upper=NULL, nlminb.control=list(), vcov=TRUE,
-  method="ml", objective.penalty=NULL, solve.tol=.Machine$double.eps,
+  method="ls", objective.penalty=NULL, solve.tol=.Machine$double.eps,
   c.code=TRUE)
 {
   #arguments:
   if(arch < garch) stop("garch order cannot be greater than arch order, since estimation is via the arma representation")
   if(arch > 1) stop("Sorry, arch order cannot be greater than 1 in the current version of lgarch")
-  #check arch
-  #check garch
-  store.aux=TRUE #allow this one to be FALSE in the future?
 
   #zoo:
   y <- as.zoo(y)
   y <- na.trim(y)
   y.index <- index(y)
   y <- coredata(y)
+
+  #xts specifics:
+  if(is.matrix(y)){
+    if(NCOL(y) > 1) stop("Dependent variable not a 1-dimensional matrix")
+     y <- y[,1]
+  }
+  y <- as.numeric(y)
+
+  #xreg:
   if(!is.null(xreg)) xreg <- cbind(coredata(xreg))
 
   #begin aux list:
@@ -163,9 +169,9 @@ function(y, arch=1, garch=1, xreg=NULL,
     par.tmp <- c(est$par[aux$ma.indx], rep(0, aux$ar-aux$ma))
     par.lgarch <- c(est$par[aux$ar.indx]+par.tmp, par.lgarch)
   }
-  namesArma <- c("constant", namesArma)
+  namesArma <- c("intercept", namesArma)
   names(par.arma) <- namesArma
-  namesLgarch <- c("constant", namesLgarch)
+  namesLgarch <- c("intercept", namesLgarch)
   const.lgarch <- est$par[1] - (1+sum(est$par[aux$ma.indx]))*Elnz2
   par.lgarch <- c(const.lgarch,par.lgarch)
   names(par.lgarch) <- namesLgarch
@@ -174,16 +180,18 @@ function(y, arch=1, garch=1, xreg=NULL,
 
   #vcov matrix:
   if(vcov){
+    #rewrite (look at mlgarch code):
     hessian.arma <- -optimHess(as.numeric(par.arma), objective.f)
     colnames(hessian.arma) <- namesArma
     rownames(hessian.arma) <- namesArma
     vcov.arma <- solve(-hessian.arma, tol=solve.tol)
-    est <- c(list(hessian.arma=hessian.arma,
-      vcov.arma=vcov.arma), est)
+    est <- c(list(aux=aux, hessian.arma=hessian.arma,
+      vcov.arma=vcov.arma, vcov.lgarch=NULL), est)
+    #est$vcov.lgarch <- vcov.lgarch(est, ...)
   }
 
   #out:
-  if(store.aux==TRUE){
+  if(is.null(est$aux)){
     est <- c(list(aux=aux),est)
   }
   class(est) <- "lgarch"

@@ -12,7 +12,8 @@ function(object, verbose=FALSE, ...)
   if(verbose){
     zhat <- aux$y/sigma
     result <- cbind(sigma, logsigma2, zhat, mUhat[,1])
-    colnames(result) <- c("sigma", "logsigma2", "zhat", "uhat")
+#    colnames(result) <- c("sigma", "logsigma2", "zhat", "uhat")
+    colnames(result) <- c("sd", "lnsd2", "zhat", "uhat")
   }else{
     result <- sigma
   }

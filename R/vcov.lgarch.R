@@ -1,5 +1,5 @@
 vcov.lgarch <-
-function(object, arma.version=FALSE,
+function(object, arma=FALSE,
   full.matrix=FALSE, ...)
 {
   #compute vcov:
@@ -7,7 +7,7 @@ function(object, arma.version=FALSE,
     result <- NULL
   }else{
     vcov.arma <- object$vcov.arma
-    if(arma.version){
+    if(arma){
       result <- vcov.arma
     }else{
 
@@ -74,7 +74,7 @@ function(object, arma.version=FALSE,
         vcov.lgarch <- vcov.lgarch[-1,-1]
         result <- vcov.lgarch
       }
-    } #end if(arma.version)
+    } #end if(arma)
   } #end if(is.null(vcov.arma)))
   return(result)
 }

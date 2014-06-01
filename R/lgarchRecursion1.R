@@ -22,7 +22,7 @@ function(pars, aux)
   if(aux$c.code){
     iStart <- max(2,aux$maxpq+1) - 1
     iEnd <- max(aux$nmaxpq, aux$n+1)
-    tmp <- .LGARCHRECURSION1(as.integer(iStart), as.integer(iEnd),
+    tmp <- ARMARECURSION1(as.integer(iStart), as.integer(iEnd),
       as.numeric(phi1), as.numeric(theta1), as.numeric(aux$yzeroadj),
       as.numeric(innov), as.numeric(lny2adj), as.numeric(uadj))
       uadj <- tmp$uadj

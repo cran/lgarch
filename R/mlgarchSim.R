@@ -2,11 +2,12 @@ mlgarchSim <-
 function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
   garch=diag(c(0.7,0.8)), xreg=NULL,
   backcast.values=list(lnsigma2=NULL, lnz2=NULL, xreg=NULL),
-  innovations=NULL, innovations.vcov=diag(c(1,1)), verbose=FALSE)
+  innovations=NULL, innovations.vcov=diag(rep(1,length(constant))),
+  check.stability=TRUE, verbose=FALSE)
 {
   #prepare:
   c.code <- FALSE #necessary until c.code implemented
-  check.stability=FALSE #temporary
+#  check.stability=FALSE #temporary
   constant <- as.vector(constant)
   iRows <- NROW(constant)
   npluss1 <- n+1
@@ -41,8 +42,7 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
 
   #check stability:
   if(check.stability){
-    roots <- polyroot(c(1,-phi))
-    if(any(abs(roots) <= 1)){
+    if(any(abs(eigen(phi)$values) >= 1)){
       mssg <- paste("The model may not be stable (one or more AR-roots is on or inside the unit circle)")
       print(mssg)
     }
@@ -50,12 +50,14 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
 
   #z series:
   if(is.null(innovations)){
+    #for the future: check if diag(innovations.vcov)==1?
     innovations <- rmnorm(n, mean=rep(0,iRows),
       vcov=innovations.vcov)
   }
   mlnz2 <- log(innovations^2)
   Elnz2 <- colMeans(mlnz2)
   if(is.null(backcast.values$lnz2)){
+    #to do: account for no lags
     mlnz2 <- rbind(as.numeric(Elnz2),mlnz2)
   }else{
     mlnz2 <- rbind(as.numeric(backcast.values$lnz2),mlnz2)
@@ -64,7 +66,7 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
   #make lnsigma2:
   lnsigma2 <- matrix(NA,npluss1,iRows)
   mI <- diag(rep(1,iRows))
-  innovInit <- cbind(Econstantx + arch %*% cbind(as.numeric(Elnz2)))
+  innovInit <- as.matrix(Econstantx) + arch %*% cbind(as.numeric(Elnz2))
   lnsigma2[1,] <- solve(mI-phi) %*% innovInit
 
   #recursion:

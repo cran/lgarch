@@ -15,12 +15,12 @@ mlgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
 }
 
 \arguments{
-  \item{y}{a numeric matrix, typically consisting of financial returns or errors from several regressions}
-  \item{arch}{the arch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order canno be greater than 1}
-  \item{garch}{the garch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order canno be greater than 1}
-  \item{xreg}{a vector or a matrix with the conditioning variables. It should be noted that the x-variables all enter in each of the equations}
+  \item{y}{a numeric matrix, typically financial returns or regression errors}
+  \item{arch}{the arch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order cannot be greater than 1}
+  \item{garch}{the garch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order cannot be greater than 1}
+  \item{xreg}{a vector or a matrix with the conditioning variables. The x-variables enter in each of the equations}
   \item{initial.values}{NULL (default) or a vector with the initial values of the VARMA representation}
-  \item{backcast.values}{initial values used for the recursions during optimisation. If the values are NULL, then the values are automatically chosen}
+  \item{backcast.values}{initial values used for the recursions during optimisation. If the values are NULL (recommended), then the values are automatically chosen}
   \item{lower}{NULL (default) or a vector with the lower bounds of the parameter space (of the VARMA representation). If NULL, then the values are automatically chosen}
   \item{upper}{NULL (default) or a vector with the upper bounds of the parameter space (of the VARMA representation). If NULL, then the values are automatically chosen}
   \item{nlminb.control}{list of control options passed on to the \code{\link{nlminb}} optimiser}

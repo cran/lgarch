@@ -31,15 +31,18 @@ glag(x, k = 1, pad = TRUE, pad.value = NA)
 \examples{
 ##lag series with NA for the missing entries:
 x <- rnorm(5)
-xlag1 <- glag(x)
+glag(x)
 
 ##lag series with no padding:
 x <- rnorm(5)
-xlag1 <- glag(x, pad=FALSE)
+glag(x, pad=FALSE)
 
 ##lag series and retain the original zoo-index ordering:
 x <- as.zoo(rnorm(5))
-xlag1 <- glag(x)
+glag(x)
+
+##lag two periods:
+glag(x, k=2)
 
 }
 

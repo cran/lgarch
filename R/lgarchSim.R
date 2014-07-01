@@ -3,6 +3,12 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   backcast.values=list(lnsigma2=NULL, lnz2=NULL, xreg=NULL),
   check.stability=TRUE, innovations=NULL, verbose=FALSE)
 {
+  #check arguments:
+  if(is.null(constant)) constant <- 0
+  if(is.null(arch)) arch <- 0
+  if(is.null(garch)) garch <- 0
+  #if(is.null(asym)) asym <- 0
+
   #orders:
   arch.p <- length(arch)
   garch.q <- length(garch)
@@ -66,11 +72,17 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
       pad.value=Elnz2))
   }
 
+  #innov series:
+  if(arch.p > 0){
+    lnz2.innov <- as.vector(mLnz2 %*% arch)
+  }else{ lnz2.innov <- rep(0,nmaxpq) }
+  innov <- constant + lnz2.innov + xreg
+
   #lnsigma2:
   if(is.null(backcast.values$lnsigma2)){
     Elnsigma2 <- (constant+sum(arch)*Elnz2+xregMean)/(1-sum(phi))
     if(abs(Elnsigma2)==Inf){
-      mssg <- paste("NOTE: The initial value of lnsigma2 is Inf")
+      mssg <- paste("NOTE: The backcast value(s) of lnsigma2 is Inf")
       print(mssg)
     }
     lnsigma2 <- c(rep(Elnsigma2,maxpq),rep(0,n))
@@ -78,14 +90,11 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
     lnsigma2 <- c(backcast.values$lnsigma2,rep(0,n))
   }
 
-  #innov series:
-  innov <- as.vector(constant + mLnz2 %*% arch + xreg)
-
   #recursion:
   maxpq1 <- maxpq+1
   phisum <- rep(0,nmaxpq)
   if(c.code){
-#    tmp <- .lgarch.simC(maxpq, nmaxpq, lnsigma2, phi, phisum, innov)
+#    tmp <- LGARCHSIM(maxpq, nmaxpq, lnsigma2, phi, phisum, innov)
 #    lnsigma2 <- tmp$lnsigma2
   }else{
     for(i in maxpq1:nmaxpq){
@@ -95,13 +104,15 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   } #end if(c.code)
 
   #output:
-  lnsigma2 <- lnsigma2[-I(1:maxpq)] #rm initial vals
+  #OLD: lnsigma2 <- lnsigma2[-I(1:maxpq)] #rm initial vals
+  lnsigma2 <- lnsigma2[-c(1:maxpq)] #rm initial vals
   if(verbose){
     sigma <- exp(lnsigma2/2)
     y <- sigma*z
     lny2 <- log(y^2)
     lnz2 <- log(z^2)
     result <- cbind(y, lny2, sigma, lnsigma2, z, lnz2)
+    colnames(result)[3] <- "sd"
   }else{
     sigma <- exp(lnsigma2/2)
     result <- sigma*z

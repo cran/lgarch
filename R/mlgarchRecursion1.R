@@ -20,8 +20,12 @@ function(pars, aux)
         mInnov)
     } #end if(..maxpq > 0)
   } #end if(..$xreg.k > 0)
-  phi1 <- matrix(pars[aux$ar.indx],aux$m,aux$m)
-  theta1 <- matrix(pars[aux$ma.indx],aux$m,aux$m)
+  if(aux$ar > 0){
+    phi1 <- matrix(pars[aux$ar.indx],aux$m,aux$m)
+  }else{ phi1 <- matrix(0,aux$m,aux$m) }
+  if(aux$ma > 0){
+    theta1 <- matrix(pars[aux$ma.indx],aux$m,aux$m)
+  }else{ theta1 <- matrix(0,aux$m,aux$m) }
 
   #recursion:
   if(aux$c.code){

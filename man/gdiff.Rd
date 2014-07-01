@@ -42,6 +42,10 @@ gdiff(as.zoo(x))
 ##1st difference of a matrix:
 y <- matrix(rnorm(8),4,2)
 gdiff(y)
+
+##2nd difference of the same matrix:
+gdiff(y, lag=2)
+
 }
 
 \keyword{Statistical Models}

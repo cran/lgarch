@@ -5,10 +5,11 @@ function(y, arch=1, garch=1, xreg=NULL,
   objective.penalty=NULL, solve.tol=.Machine$double.eps,
   c.code=TRUE)
 {
-  #check arguments:
-  if(arch < garch) stop("garch order cannot be greater than arch order, since estimation is via the arma representation")
-  if(arch > 1) stop("Sorry, arch order cannot be greater than 1 in the current version of lgarch")
-#  if(NCOL(y) != 2) stop("Sorry, only 2-dimensional models are currently available")
+  #check/change arguments:
+  if(is.null(arch)){ arch <- 0 }
+  if(is.null(garch)){ garch <- 0 }
+  if(arch < garch) stop("garch order cannot be greater than arch order, since estimation is via the varma representation")
+  if(arch > 1) stop("Sorry, arch order cannot be greater than 1 in the current version of mlgarch")
 
   #zoo:
   y <- as.zoo(y)
@@ -33,7 +34,6 @@ function(y, arch=1, garch=1, xreg=NULL,
   aux$n <- NROW(y)
   aux$m <- NCOL(y)
   if(!is.null(xreg)){
-    aux$xreg <- xreg
     aux$xreg.m <- NCOL(aux$xreg)
     aux$xreg <- xreg; #rm(xreg) in the future?
   }
@@ -114,8 +114,12 @@ function(y, arch=1, garch=1, xreg=NULL,
 
   #initial values:
   if(is.null(initial.values)){
-    ma.initvals <- as.vector( diag(rep(-0.8/aux$ma, aux$m)) )
-    ar.initvals <- as.vector( diag(rep(0.9/aux$ar, aux$m)) )
+    if(aux$ma > 0){
+      ma.initvals <- as.vector( diag(rep(-0.8/aux$ma, aux$m)) )
+    }else{ ma.initvals <- NULL }
+    if(aux$ar > 0){
+      ar.initvals <- as.vector( diag(rep(0.9/aux$ar, aux$m)) )
+    }else{ ar.initvals <- NULL }
     #future: check ar.initvals for stability?
     if(is.null(aux$xreg)){
       xreg.initvals <- numeric(0)
@@ -124,7 +128,10 @@ function(y, arch=1, garch=1, xreg=NULL,
       xreg.initvals <- rep(0.01, aux$xreg.k)
       aux$xregMeans <- as.numeric(colMeans(aux$xreg))
     }
-    IminPhi1 <- diag(rep(1,aux$m)) - matrix(ar.initvals,aux$m,aux$m)
+    IminPhi1 <- diag(rep(1,aux$m))
+    if(aux$ar > 0){
+      IminPhi1 <- IminPhi1 - matrix(ar.initvals,aux$m,aux$m)
+    }
     const.initvals <- IminPhi1%*%cbind(aux$Elny2)
     if(aux$xreg.k > 0){
       const.initvals <- const.initvals - matrix(xreg.initvals,aux$m,aux$xreg.m) %*% aux$xregMeans
@@ -141,7 +148,6 @@ function(y, arch=1, garch=1, xreg=NULL,
       stop("length(initial.values) not equal to no. of parameters to be estimated")
     } #end check length(initial.values)
   } #end if..else..
-#  aux$initial.values.varma <- initial.values
   aux$initial.values <- initial.values
 
   #upper bounds:

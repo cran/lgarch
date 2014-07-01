@@ -16,6 +16,7 @@ function(x, varma=FALSE, ...)
   colnames(out2) <- ""
   cat("\n")
   cat("Date:", x$date, "\n")
+  cat("Method: Multivariate ML \n")
   cat("Message (nlminb):", x$message, "\n")
   cat("No. of observations:", x$aux$n, "\n")
   cat("Sample:", as.character(x$aux$y.index[1]),

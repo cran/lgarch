@@ -23,7 +23,7 @@ Extraction methods for objects of class 'mlgarch' (i.e. the result of estimating
 \arguments{
   \item{object}{an object of class 'mlgarch'}
   \item{x}{an object of class 'mlgarch'}
-  \item{verbose}{logical. If FALSE (default) then only basic information is returned}
+  \item{verbose}{logical. If FALSE (default), then only basic information is returned}
   \item{varma}{logical. If FALSE (default), then information relating to the multivariate CCC-log-GARCH model is returned. If TRUE, then information relating to the VARMA representation is returned}
   \item{...}{additional arguments}
 }

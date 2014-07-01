@@ -7,9 +7,9 @@ function(object, arma=FALSE, ...)
       sd=sigma, log=TRUE))
     attr(result, "df") <- length(object$par)-1
   }
-  if(arma==TRUE && object$aux$method=="ml"){
-    result <- object$objective
-    attr(result, "df") <- length(object$par)
+  if(arma==TRUE && object$aux$method!="ls"){
+    result <- object$objective.arma
+    attr(result, "df") <- length(object$par.arma)-1
   }
   if(arma==TRUE && object$aux$method=="ls"){
     uhat <- lgarchRecursion1(as.numeric(object$par.arma),
@@ -18,7 +18,7 @@ function(object, arma=FALSE, ...)
       uhat <- uhat[-object$aux$yzerowhere]
     }
     result <- sum(dnorm(uhat, sd=sd(uhat), log=TRUE))
-    attr(result, "df") <- length(object$par)
+    attr(result, "df") <- length(object$par.arma)
   }
   attr(result, "nobs") <- length(object$aux$ynonzeron)
   class(result) <- "logLik"

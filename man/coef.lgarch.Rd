@@ -20,15 +20,14 @@ Extraction methods for objects of class 'lgarch' (i.e. the result of estimating 
 ## informal method for class 'lgarch'
 rss(object, ...)
 \method{residuals}{lgarch}(object, arma = FALSE, ...)
-\method{vcov}{lgarch}(object, arma = FALSE, full.matrix = FALSE, ...)
+\method{vcov}{lgarch}(object, arma = FALSE, ...)
 }
 
 \arguments{
   \item{object}{an object of class 'lgarch'}
   \item{x}{an object of class 'lgarch'}
-  \item{verbose}{logical. If FALSE (default) then only basic information is returned}
-  \item{arma}{logical. If FALSE (default), then information relating to the log-garch model is returned. If TRUE, then information relating to the arma representation is returned}
-  \item{full.matrix}{logical. If TRUE, then the full variance-covariance matrix is returned}
+  \item{verbose}{logical. If FALSE (default), then only basic information is returned}
+  \item{arma}{logical. If FALSE (default), then information relating to the log-garch model is returned. If TRUE, then information relating to the ARMA representation is returned}
   \item{...}{additional arguments}
 }
 
@@ -36,7 +35,7 @@ rss(object, ...)
 
 \value{
   \item{coef:}{A numeric vector containing the parameter estimates}
-  \item{fitted:}{A \code{\link{zoo}} object. If verbose = FALSE (default), then the zoo object is a vector containing the fitted conditional standard deviations. If verbose = TRUE, then the zoo object is a matrix that contains additional information}
+  \item{fitted:}{A \code{\link{zoo}} object. If verbose = FALSE (default), then the zoo object is a vector containing the fitted conditional standard deviations. If verbose = TRUE, then the zoo object is a matrix containing the conditional standard deviations and additional information}
   \item{logLik:}{The value of the log-likelihood (contributions at zeros excluded) at the maximum}
   \item{print:}{Prints the most important parts of the estimation results}
   \item{residuals:}{A \code{\link{zoo}} object with the residuals. If arma = FALSE (default), then the standardised residuals are returned. If arma = TRUE, then the residuals of the ARMA representation is returned}
@@ -67,7 +66,7 @@ logLik(mymod)
 ##extract the Residual Sum of Squares of the ARMA representation:
 rss(mymod)
 
-##extract Gaussian log-likelihood (zeros excluded) of the arma representation:
+##extract log-likelihood (zeros excluded) of the ARMA representation:
 logLik(mymod, arma=TRUE)
 
 ##extract variance-covariance matrix:

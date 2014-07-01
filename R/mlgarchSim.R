@@ -5,12 +5,16 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
   innovations=NULL, innovations.vcov=diag(rep(1,length(constant))),
   check.stability=TRUE, verbose=FALSE)
 {
-  #prepare:
+  #check/change arguments:
+  if(is.null(constant)){ constant <- 0 }
+  if(is.null(arch)){ arch <- 0 }
+  if(is.null(garch)){ garch <- 0 }
   c.code <- FALSE #necessary until c.code implemented
-#  check.stability=FALSE #temporary
+
+  #prepare:
+  npluss1 <- n+1
   constant <- as.vector(constant)
   iRows <- NROW(constant)
-  npluss1 <- n+1
 
   #xreg:
   if(is.null(xreg)){
@@ -26,14 +30,14 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
   }
 
   #arch:
-  if(is.null(arch)){
+  if(length(arch) == 1 && arch==0){
     #arch <- list()
     #arch[[1]] <- matrix(0,iRows,iRows)
     arch <- matrix(0,iRows,iRows)
   }
 
   #garch:
-  if(is.null(garch)){
+  if(length(garch) == 1 && garch==0){
     garch <- matrix(0,iRows,iRows)
   }
 
@@ -88,7 +92,7 @@ function(n, constant=c(0,0), arch=diag(c(0.1,0.05)),
   if(verbose){
     y <- cbind(y, sigma, innovations)
     colnames(y) <- c(paste("y",1:iRows,sep=""),
-      paste("sigma",1:iRows,sep=""),
+      paste("sd",1:iRows,sep=""),
       paste("innov",1:iRows,sep="") )
   }else{
     colnames(y) <- paste("y",1:iRows,sep="")

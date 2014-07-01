@@ -13,7 +13,11 @@ function(pars, aux)
   }
   #yzeroadj <- c(rep(1,1:max(1,aux$maxpq)), aux$yzero)
   Elny2 <- innovMean/(1-sum(pars[aux$ar.indx]))
-  lny2adj <- c(rep(Elny2,1:max(1,aux$maxpq)), aux$lny2)
+  if(aux$mean.correction){
+    lny2adj <- c(rep(Elny2,1:max(1,aux$maxpq)), aux$lny2mc)
+  }else{
+    lny2adj <- c(rep(Elny2,1:max(1,aux$maxpq)), aux$lny2)
+  }
   uadj <- aux$zerosaux
 
   #recursion:

@@ -4,7 +4,7 @@
 \title{ Simulate from a univariate log-GARCH model }
 
 \description{
-Simulate the y series (typically interpreted as a financial return or the error in a regression) from a log-GARCH model. Optionally, the conditional standard deviation and the standardised error (z), together with their logarithmic transformations, are also returned.
+Simulate the y series (typically a financial return or the error in a regression) from a log-GARCH model. Optionally, the conditional standard deviation, the standardised error (z) and their logarithmic transformations are also returned.
 }
 
 \usage{
@@ -14,13 +14,13 @@ lgarchSim(n, constant = 0, arch = 0.05, garch = 0.9, xreg = NULL,
 }
 
 \arguments{
-  \item{n}{integer, length of y (i.e. no of observations)}
+  \item{n}{integer, length of y (i.e. number of observations)}
   \item{constant}{the value of the intercept in the log-volatility specification}
   \item{arch}{numeric vector with the arch coefficients}
   \item{garch}{numeric vector with the garch coefficients}
   \item{xreg}{numeric vector (of length n) with the conditioning values}
   \item{backcast.values}{backcast values for the recursion (chosen automatically if NULL)}
-  \item{check.stability}{logical. If TRUE (default) then the roots of arch+garch are checked for stability}
+  \item{check.stability}{logical. If TRUE (default), then the roots of arch+garch are checked for stability}
   \item{innovations}{Etiher NULL (default) or a vector of length n with the standardised errors (i.e. z). If NULL, then the innovations are normal with mean zero and unit variance}
   \item{verbose}{logical. If FALSE (default), then only the vector y is returned. If TRUE, then a matrix with all the output is returned}
 }
@@ -62,6 +62,14 @@ z <- rnorm(500)
 zneg <- as.numeric(z < 0)
 zneglagged <- glag(zneg, pad=TRUE, pad.value=0)
 y <- lgarchSim(500, xreg=0.05*zneglagged, innovations=z)
+
+##simulate from a log-GARCH w/standardised t-innovations:
+set.seed(123)
+n <- 500
+df <- 5
+z <- rt(n, df=df)/sqrt(df/(df-2))
+y <- lgarchSim(n, innovations=z)
+
 }
 
 \keyword{Statistical Models}

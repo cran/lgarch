@@ -4,7 +4,7 @@
 \title{Simulation and estimation of log-GARCH models}
 
 \description{
-This package provides facilities for the simulation and estimation of univariate log-GARCH models, and for the the multivariate CCC-log-GARCH(1,1) model, see Sucarrat, Gronneberg and Escribano (2013).\cr
+This package provides facilities for the simulation and estimation of univariate log-GARCH models, and for the multivariate CCC-log-GARCH(1,1) model, see Sucarrat, Gronneberg and Escribano (2013), Sucarrat and Escribano (2013), and Francq and Sucarrat (2013).\cr
 
 Let y[t] denote a financial return or the error of a regression at time t such that
 
@@ -27,30 +27,35 @@ Date: \tab 2014-06-01\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
-The main functions of the package are: \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}} and \code{\link{mlgarch}}. The first two functions simulate from a univariate and a multivariate log-GARCH model, respectively, whereas the latter two estimate a univariate and multivariate log-GARCH model, respectively.
+The main functions of the package are: \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}} and \code{\link{mlgarch}}. The first two functions simulate from a univariate and a multivariate log-GARCH model, respectively, whereas the latter two estimate a univariate and a multivariate log-GARCH model, respectively.
 
-The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to them: coef, fitted, logLik, print, residuals and vcov. In addition, the function \code{\link{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
+The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to each of them: coef, fitted, logLik, print, residuals and vcov. In addition, the function \code{\link{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
 
-The output produced by the \code{\link{lgarchSim}} and \code{\link{mlgarchSim}} functions, and by the and by the fitted and residuals methods, are of the Z's ordered observations (\code{\link{zoo}}) class, see Zeileis and Grothendieck (2005). This means a range of time-series and plotting methods are available for these objects.
+The output produced by the \code{\link{lgarchSim}} and \code{\link{mlgarchSim}} functions, and by the fitted and residuals methods, are of the Z's ordered observations (\code{\link{zoo}}) class, see Zeileis and Grothendieck (2005), and Zeileis, Grothendieck and Ryan (2014). This means a range of time-series and plotting methods are available for these objects.
 }
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
 
 \references{
-Sucarrat and Escribano (2013), 'Unbiased QML Estimation of Log-GARCH Models in the Presence of Zero Returns', MPRA Paper 50699: \url{http://mpra.ub.uni-muenchen.de/50699/} \cr
+Francq, C. and G. Sucarrat (2013), 'An Exponential Chi-Squared QMLE for Log-GARCH Models via the ARMA Representation', MPRA Paper 51783: \url{http://mpra.ub.uni-muenchen.de/51783/} \cr
 
-Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
+Sucarrat, G. and A. Escribano (2013), 'Unbiased QML Estimation of Log-GARCH Models in the Presence of Zero Returns', MPRA Paper 50699: \url{http://mpra.ub.uni-muenchen.de/50699/} \cr
 
-Zeileis, Achim and Grothendieck, Gabor (2005), 'zoo: S3 Infrastructure for Regular and Irregular Time Series', Journal of Statistical Software 14, pp. 1-27 \cr
+Sucarrat, G., S. Gronneberg and A. Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
+
+Zeileis, A. and G. Grothendieck (2005), 'zoo: S3 Infrastructure for Regular and Irregular Time Series', Journal of Statistical Software 14, pp. 1-27 \cr
+
+Zeileis, A., G. Grothendieck, J.A. Ryan and F. Andrews(2014), 'zoo: S3 Infrastructure for Regular and Irregular Time Series (Z's ordered observations)', R package version 1.7-11, http://CRAN.R-project.org/package=zoo/
 }
 \seealso{
 \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}}, \code{\link{mlgarch}}, \code{\link{coef.lgarch}}, \code{\link{coef.mlgarch}}, \code{\link{fitted.lgarch}}, \cr
 \code{\link{fitted.mlgarch}}, \code{\link{logLik.lgarch}}, \code{\link{logLik.mlgarch}}, \code{\link{print.lgarch}}, \code{\link{print.mlgarch}}, \code{\link{residuals.lgarch}}, \cr
-\code{\link{residuals.mlgarch}}, \code{\link{rss}}, \code{\link{vcov.lgarch}} and \code{\link{vcov.mlgarch}}
+\code{\link{residuals.mlgarch}}, \code{\link{rss}}, \code{\link{vcov.lgarch}}, \code{\link{vcov.mlgarch}} and \code{\link{zoo}}
 }
 
 \examples{
-##simulate 500 observations w/default parameter values:
+##simulate 500 observations w/default parameter values from
+##a univariate log-garch(1,1):
 set.seed(123)
 y <- lgarchSim(500)
 
@@ -63,10 +68,10 @@ print(mymod)
 ##extract coefficients:
 coef(mymod)
 
-##extract Gaussian log-likelihood (zeros excluded) of the log-garch model:
+##extract Gaussian log-likelihood (zeros excluded, if any) of the log-garch model:
 logLik(mymod)
 
-##extract Gaussian log-likelihood (zeros excluded) of the arma representation:
+##extract Gaussian log-likelihood (zeros excluded, if any) of the arma representation:
 logLik(mymod, arma=TRUE)
 
 ##extract variance-covariance matrix:
@@ -84,8 +89,8 @@ plot(zhat)
 myhat <- fitted(mymod, verbose=TRUE)
 plot(myhat)
 
-##simulate 1000 observations from a ccc-log-garch(1,1)
-##w/default parameter values:
+##simulate 1000 observations from a two-dimensional
+##ccc-log-garch(1,1) w/default parameter values:
 set.seed(123)
 yy <- mlgarchSim(1000)
 

@@ -2,15 +2,11 @@ rss <-
 function(object, ...)
 {
   if(class(object)!="lgarch") stop("object does not belong to the lgarch class")
-  if(object$aux$method=="ls"){
-    result <- object$objective
-  }else{
-    uhat <- lgarchRecursion1(as.numeric(object$par.arma),
-      object$aux)
-    if(object$aux$yzeron > 0){
-      uhat <- uhat[-object$aux$yzerowhere]
-    }
-    result <- sum(uhat^2)
+    pars <- as.numeric(object$par.arma)
+    if(object$aux$mean.correction){ pars[1] <- 0 }
+    uhat <- lgarchRecursion1(pars, object$aux)
+  if(object$aux$yzeron > 0){
+    uhat <- uhat[-object$aux$yzerowhere]
   }
-  return(result)
+  return(sum(uhat^2))
 }

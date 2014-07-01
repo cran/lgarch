@@ -2,21 +2,24 @@ lgarch <-
 function(y, arch=1, garch=1, xreg=NULL,
   initial.values=NULL,
   backcast.values=list(lny2=NULL, lnz2=NULL, xreg=NULL),
-  lower=NULL, upper=NULL, nlminb.control=list(), vcov=TRUE,
-  method="ls", objective.penalty=NULL, solve.tol=.Machine$double.eps,
+  lower=NULL, upper=NULL, nlminb.control=list(),
+  vcov=TRUE, method=c("ls","ml","cex2"), mean.correction=FALSE,
+  objective.penalty=NULL, solve.tol=.Machine$double.eps,
   c.code=TRUE)
 {
-  #arguments:
+  #check/change arguments:
   if(arch < garch) stop("garch order cannot be greater than arch order, since estimation is via the arma representation")
   if(arch > 1) stop("Sorry, arch order cannot be greater than 1 in the current version of lgarch")
+  method <- match.arg(method)
+  if(method=="cex2"){ mean.correction <- TRUE }
+  if(mean.correction==TRUE && method=="ls" && arch==0 && garch==0 && is.null(xreg) )
+    stop("This combination is not possible. Try setting mean.correction=FALSE")
 
-  #zoo:
+  #zoo and xts specific:
   y <- as.zoo(y)
   y <- na.trim(y)
   y.index <- index(y)
   y <- coredata(y)
-
-  #xts specifics:
   if(is.matrix(y)){
     if(NCOL(y) > 1) stop("Dependent variable not a 1-dimensional matrix")
      y <- y[,1]
@@ -48,6 +51,7 @@ function(y, arch=1, garch=1, xreg=NULL,
     aux$lny2 <- log(y2)
     aux$Elny2 <- mean(aux$lny2)
   }
+  if(mean.correction){ aux$lny2mc <- aux$lny2 - aux$Elny2 }
 
   #orders:
   aux$maxpq <- max(arch,garch)
@@ -67,7 +71,7 @@ function(y, arch=1, garch=1, xreg=NULL,
     aux$xreg.k <- ncol(aux$xreg)
     aux$xreg.indx <- c(max(1,aux$ar.indx,aux$ma.indx)+1):c(max(1,aux$ar.indx,aux$ma.indx)+aux$xreg.k)
   }
-  if(method=="ml"){
+  if(method!="ls"){
     aux$sigma2u.indx <- 1 + aux$ar + aux$ma + aux$xreg.k + 1
   }
 
@@ -84,7 +88,9 @@ function(y, arch=1, garch=1, xreg=NULL,
     ar.initvals <- rep(0.9/aux$ar, aux$ar)
     #to do: check ar.initvals for stability?
     constant <- (1-sum(ar.initvals))*aux$Elny2 - xregMean
-    if(method=="ml"){ sigma2u <- 4.94 }else{ sigma2u <- NULL }
+    sigma2u <- NULL
+    if(method=="ml"){ sigma2u <- 4.94 }
+    if(method=="cex2"){ sigma2u <- -1.27 }
     initial.values <- c(constant, ar.initvals, ma.initvals,
       xreg.initvals, sigma2u)
   }else{
@@ -93,13 +99,12 @@ function(y, arch=1, garch=1, xreg=NULL,
       stop("length(initial.values) not equal to no. of parameters to be estimated")
     } #end check length
   } #end if..else..
-  aux$initial.values.arma <- initial.values
 
   #upper bounds:
   if(is.null(upper)){
     upper <- c(Inf, rep(1-.Machine$double.eps,aux$ar),
       rep(1-.Machine$double.eps,aux$ma), rep(Inf, aux$xreg.k))
-    if(method=="ml"){ upper <- c(upper,Inf) }
+    if(method!="ls"){ upper <- c(upper,Inf) }
   }else{
     if( length(upper)!=length(initial.values) )
       stop("length(upper) not equal to length(initial.values)")
@@ -111,6 +116,7 @@ function(y, arch=1, garch=1, xreg=NULL,
     lower <- c(-Inf, rep(.Machine$double.eps-1,aux$ar),
       rep(.Machine$double.eps-1,aux$ma), rep(-Inf, aux$xreg.k))
     if(method=="ml"){ lower <- c(lower,0) }
+    if(method=="cex2"){ lower <- c(lower,-Inf) }
   }else{
     if( length(lower)!=length(initial.values) )
       stop("length(lower) not equal to length(initial.values)")
@@ -120,9 +126,16 @@ function(y, arch=1, garch=1, xreg=NULL,
   #misc:
   aux$c.code <- c.code
   aux$solve.tol <- solve.tol
+  aux$mean.correction <- mean.correction
   aux$verboseRecursion <- FALSE
   aux$yzeroadj <- c(rep(1,max(1,aux$maxpq)), aux$yzero)
   aux$zerosaux <- rep(0,max(aux$nmaxpq, aux$n+1))
+  if(mean.correction){
+    initial.values <- initial.values[-1]
+    aux$upper <- aux$upper[-1]
+    aux$lower <- aux$lower[-1]
+  }
+  aux$initial.values.arma <- initial.values
   if(is.null(objective.penalty)){
     aux$objective.penalty <- lgarchObjective(initial.values, aux)
   }else{
@@ -130,29 +143,56 @@ function(y, arch=1, garch=1, xreg=NULL,
   }
 
   #estimate:
-  if(method=="ml"){
-    objective.f <- function(pars, x=aux){ -lgarchObjective(pars,x) }
-  }else{
+  if(method=="ls"){
     objective.f <- function(pars, x=aux){ lgarchObjective(pars,x) }
+  }else{
+    objective.f <- function(pars, x=aux){ -lgarchObjective(pars,x) }
   }
-  est <- nlminb(initial.values, objective.f, lower=lower,
-    upper=upper, control=nlminb.control)
-  if(method=="ml") est$objective <- -est$objective
+  est <- nlminb(initial.values, objective.f, lower=aux$lower,
+    upper=aux$upper, control=nlminb.control)
+
+  #post-estimation:
+  if(method!="ls") est$objective <- -est$objective
+  if(mean.correction){
+    est$par <- c(0,est$par)
+    if(aux$ar > 0){
+      arsum <- sum(est$par[aux$ar.indx])
+    }else{
+      arsum <- 0
+    }
+    est$par[1] <- (1-arsum)*aux$Elny2
+  }
   names(est)[2] <- "objective.arma"
 
-  #parameters:
-  uadj <- lgarchRecursion1(as.numeric(est$par), aux)
+  #Elnz2 and sigma2u parameters:
+  if(mean.correction){
+    uadj <- lgarchRecursion1(c(0,est$par[-1]), aux)
+  }else{
+    uadj <- lgarchRecursion1(est$par, aux)
+  }
   if(aux$yzeron > 0){
     uadj <- uadj[-aux$yzerowhere]
   }
-  if(method=="ml"){ Elnz2 <- -log(mean(exp(uadj - mean(uadj)))) }
-  if(method=="ls"){ Elnz2 <- -log(mean(exp(uadj))) }
+  if(method=="ls"){
+    Elnz2 <- -log(mean(exp(uadj)))
+    namesArma <- NULL
+    sigma2u <- var(uadj)
+  }
+  if(method=="ml"){
+    Elnz2 <- -log(mean(exp(uadj - mean(uadj))))
+    namesArma <- "sigma2u"
+    sigma2u <- est$par[aux$sigma2u.indx]
+  }
+  if(method=="cex2"){
+    Elnz2<- est$par[aux$sigma2u.indx]
+    namesArma <- "Elnz2"
+    sigma2u <- var(uadj)
+  }
   par.lgarch <- Elnz2
   namesLgarch <- "Elnz2"
   par.arma <- est$par
-  if(method=="ml"){
-    namesArma <- "sigma2u"
-  }else{ namesArma <- NULL }
+
+  #xreg, garch, arch and intercept parameters:
   if(aux$xreg.k > 0){
     namesArma <- c(paste("xreg",1:aux$xreg.k,sep=""), namesArma)
     namesLgarch <- c(paste("xreg",1:aux$xreg.k,sep=""), namesLgarch)
@@ -169,7 +209,10 @@ function(y, arch=1, garch=1, xreg=NULL,
     par.tmp <- c(est$par[aux$ma.indx], rep(0, aux$ar-aux$ma))
     par.lgarch <- c(est$par[aux$ar.indx]+par.tmp, par.lgarch)
   }
+
+  #intercept and completion:
   namesArma <- c("intercept", namesArma)
+  #OLD: par.arma <- est$par
   names(par.arma) <- namesArma
   namesLgarch <- c("intercept", namesLgarch)
   const.lgarch <- est$par[1] - (1+sum(est$par[aux$ma.indx]))*Elnz2
@@ -180,14 +223,18 @@ function(y, arch=1, garch=1, xreg=NULL,
 
   #vcov matrix:
   if(vcov){
-    #rewrite (look at mlgarch code):
-    hessian.arma <- -optimHess(as.numeric(par.arma), objective.f)
+    par.arma <- as.numeric(par.arma)
+    if(mean.correction){
+      par.arma <- par.arma[-1]
+      namesArma <- namesArma[-1]
+    }
+    hessian.arma <- -optimHess(par.arma, objective.f)
     colnames(hessian.arma) <- namesArma
     rownames(hessian.arma) <- namesArma
     vcov.arma <- solve(-hessian.arma, tol=solve.tol)
     est <- c(list(aux=aux, hessian.arma=hessian.arma,
       vcov.arma=vcov.arma, vcov.lgarch=NULL), est)
-    #est$vcov.lgarch <- vcov.lgarch(est, ...)
+    est$vcov.lgarch <- vcov.lgarch(est, arma=FALSE)
   }
 
   #out:

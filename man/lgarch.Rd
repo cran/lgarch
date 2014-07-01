@@ -4,14 +4,15 @@
 \title{ Estimate a log-GARCH model }
 
 \description{
-Fit a log-GARCH model by either (nonlinear) Least Squares (LS) or Gaussian Quasi Maximum Likelihood (QML) via the ARMA representation, see Sucarrat, Gronneberg and Escribano (2013). Zero-values on the dependent variable y are treated as missing values, as suggested in Sucarrat and Escribano (2013). Estimation is via the \code{\link{nlminb}} function, whereas a numerical estimate of the Hessian is obtained with \code{\link{optimHess}} for the computation of the variance-covariance matrix
+Fit a log-GARCH model by either (nonlinear) Least Squares (LS) or Quasi Maximum Likelihood (QML) via the ARMA representation. For QML either the Gaussian or centred exponential chi-squared distribution can be used as instrumental density, see Sucarrat, Gronneberg and Escribano (2013), and Francq and Sucarrat (2013). Zero-values on the dependent variable y are treated as missing values, as suggested in Sucarrat and Escribano (2013). Estimation is via the \code{\link{nlminb}} function, whereas a numerical estimate of the Hessian is obtained with \code{\link{optimHess}} for the computation of the variance-covariance matrix
 }
 
 \usage{
 lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
   backcast.values = list(lny2 = NULL, lnz2 = NULL, xreg = NULL),
   lower = NULL, upper = NULL, nlminb.control = list(), vcov = TRUE,
-  method="ls", objective.penalty = NULL, solve.tol = .Machine$double.eps,
+  method=c("ls","ml","cex2"), mean.correction=FALSE,
+  objective.penalty = NULL, solve.tol = .Machine$double.eps,
   c.code = TRUE)
 }
 
@@ -21,20 +22,23 @@ lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
   \item{garch}{the garch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order canno be greater than 1}
   \item{xreg}{vector or matrix with conditioning variables}
   \item{initial.values}{NULL (default) or a vector with the initial values of the ARMA-representation}
-  \item{backcast.values}{initial values used for the recursions during optimisation. If the values are NULL, then the values are automatically chosen}
+  \item{backcast.values}{backcast values used for the recursions during optimisation. If NULL (recommended), then the values are automatically chosen}
   \item{lower}{NULL (default) or a vector with the lower bounds of the parameter space (of the ARMA-representation). If NULL, then the values are automatically chosen}
   \item{upper}{NULL (default) or a vector with the upper bounds of the parameter space (of the ARMA-representation). If NULL, then the values are automatically chosen}
   \item{nlminb.control}{list of control options passed on to the \code{\link{nlminb}} optimiser}
   \item{vcov}{logical. If TRUE (default), then the variance-covariance matrix is computed. The FALSE options makes estimation faster, but the variance-covariance matrix cannot be extracted subsequently}
-  \item{method}{Estimation method to use. Either "ls", i.e. Nonlinear Least Squares (default), or "ml", i.e. Gaussian QML}
-  \item{objective.penalty}{NULL (default) or a numeric value. If NULL, then the log-likelihood value associated with the initial values is used. Sometimes estimation can result in NA and/or +/-Inf values (this can be fatal for simulations). The value objective.penalty is the value returned by the log-likelihood function \code{\link{lgarchObjective}} in the presence of NA or +/-Inf values}
+  \item{method}{Estimation method to use. Either "ls", i.e. Nonlinear Least Squares (default), "ml", i.e. Gaussian QML or "cex2", i.e. Centred exponential Chi-squared QML, see Francq and Sucarrat (2013). Note: For the cex2 method mean-correction = FALSE is not available}
+  \item{mean.correction}{Whether to mean-correct the ARMA representation. Mean-correction is usually faster, but not always recommended if covariates are added (i.e. if xreg is not NULL)}
+  \item{objective.penalty}{NULL (default) or a numeric value. If NULL, then the log-likelihood value associated with the initial values is used. Sometimes estimation can result in NA and/or +/-Inf values (this can be fatal for simulations). The value objective.penalty is the value returned by the objective function \code{\link{lgarchObjective}} in the presence of NA or +/-Inf values}
   \item{solve.tol}{The function \code{\link{solve}} is used for the inversion of the negative of the Hessian in computing the variance-covariance matrix. The value solve.tol is passed on to \code{\link{solve}}, and is the tolerance for detecting linear dependencies in the columns}
-  \item{c.code}{logical. TRUE (default) is (much) faster, since it makes use of compiled C-code}
+  \item{c.code}{logical. TRUE (default) is (much) faster, since it makes use of compiled C-code in the recursions}
 }
 
 \value{ A list of class 'lgarch' }
 
 \references{
+Francq, C. and G. Sucarrat (2013), 'An Exponential Chi-Squared QMLE for Log-GARCH Models via the ARMA Representation', MPRA Paper 51783: \url{http://mpra.ub.uni-muenchen.de/51783/} \cr
+
 Sucarrat and Escribano (2013), 'Unbiased QML Estimation of Log-GARCH Models in the Presence of Zero Returns', MPRA Paper 50699: \url{http://mpra.ub.uni-muenchen.de/50699/} \cr
 
 Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
@@ -53,11 +57,14 @@ Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univaria
 set.seed(123)
 y <- lgarchSim(500)
 
-##estimate a log-garch(1,1):
+##estimate a log-garch(1,1) w/least squares:
 mymod <- lgarch(y)
 
+##estimate the same model, but w/cex2 method:
+mymod2 <- lgarch(y, method="cex2")
+
 ##print results:
-print(mymod)
+print(mymod); print(mymod2)
 
 ##extract coefficients:
 coef(mymod)

@@ -4,7 +4,7 @@
 \title{ Simulate from a multivariate log-GARCH(1,1) model }
 
 \description{
-Simulate the y series (typically interpreted as a collection of financial returns or regression errors) from a log-GARCH model. Optionally, the conditional standard deviation and the standardised error, together with their logarithmic transformations, are also returned.
+Simulate the y series (typically a collection of financial returns or regression errors) from a log-GARCH model. Optionally, the conditional standard deviation and the standardised error, together with their logarithmic transformations, are also returned.
 }
 \usage{
 mlgarchSim(n, constant = c(0,0), arch = diag(c(0.1, 0.05)),
@@ -19,12 +19,12 @@ mlgarchSim(n, constant = c(0,0), arch = diag(c(0.1, 0.05)),
   \item{constant}{vector with the values of the intercepts in the log-volatility specification}
   \item{arch}{matrix with the arch coefficients}
   \item{garch}{matrix with the garch coefficients}
-  \item{xreg}{a vector or a matrix with the values of the conditioning variables. The first column enters the first equation, the second enters the second equation, and so on}
+  \item{xreg}{a vector (of length n) or matrix (with rows n) with the values of the conditioning variables. The first column enters the first equation, the second enters the second equation, and so on}
   \item{backcast.values}{backcast values for the recursion (chosen automatically if NULL)}
   \item{check.stability}{logical. If TRUE (default), then the system is checked for stability}
   \item{innovations}{Either NULL (default) or a vector or matrix of length n with the standardised errors. If NULL, then the innovations are multivariate N(0,1) with correlations equal to zero}
   \item{innovations.vcov}{numeric matrix, the variance-covariance matrix of the standardised multivariate normal innovations. Only applicable if innovations = NULL}
-  \item{verbose}{logical. If FALSE (default), then only the vector y is returned. If TRUE, then a matrix with all the output is returned}
+  \item{verbose}{logical. If FALSE (default), then only the matrix with the y series is returned. If TRUE, then also additional information is returned}
 }
 \details{Empty}
 \value{

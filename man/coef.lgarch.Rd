@@ -5,6 +5,7 @@
 \alias{print.lgarch}
 \alias{rss}
 \alias{residuals.lgarch}
+\alias{summary.lgarch}
 \alias{vcov.lgarch}
 
 \title{ Extraction methods for 'lgarch' objects }
@@ -20,6 +21,7 @@ Extraction methods for objects of class 'lgarch' (i.e. the result of estimating 
 ## informal method for class 'lgarch'
 rss(object, ...)
 \method{residuals}{lgarch}(object, arma = FALSE, ...)
+\method{summary}{lgarch}(object, ...)
 \method{vcov}{lgarch}(object, arma = FALSE, ...)
 }
 
@@ -40,6 +42,7 @@ rss(object, ...)
   \item{print:}{Prints the most important parts of the estimation results}
   \item{residuals:}{A \code{\link{zoo}} object with the residuals. If arma = FALSE (default), then the standardised residuals are returned. If arma = TRUE, then the residuals of the ARMA representation is returned}
   \item{rss:}{A numeric; the Residual Sum of Squares of the ARMA representation}
+  \item{summary:}{A print of the items in the \code{\link{lgarch}} object}
   \item{vcov:}{The variance-covariance matrix}
 }
 

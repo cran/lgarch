@@ -9,7 +9,6 @@ Fit a log-GARCH model by either (nonlinear) Least Squares (LS) or Quasi Maximum 
 
 \usage{
 lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
-  backcast.values = list(lny2 = NULL, lnz2 = NULL, xreg = NULL),
   lower = NULL, upper = NULL, nlminb.control = list(), vcov = TRUE,
   method=c("ls","ml","cex2"), mean.correction=FALSE,
   objective.penalty = NULL, solve.tol = .Machine$double.eps,
@@ -22,7 +21,6 @@ lgarch(y, arch = 1, garch = 1, xreg = NULL, initial.values = NULL,
   \item{garch}{the garch order (i.e. an integer equal to or greater than 0). The default is 1. NOTE: in the current version the order canno be greater than 1}
   \item{xreg}{vector or matrix with conditioning variables}
   \item{initial.values}{NULL (default) or a vector with the initial values of the ARMA-representation}
-  \item{backcast.values}{backcast values used for the recursions during optimisation. If NULL (recommended), then the values are automatically chosen}
   \item{lower}{NULL (default) or a vector with the lower bounds of the parameter space (of the ARMA-representation). If NULL, then the values are automatically chosen}
   \item{upper}{NULL (default) or a vector with the upper bounds of the parameter space (of the ARMA-representation). If NULL, then the values are automatically chosen}
   \item{nlminb.control}{list of control options passed on to the \code{\link{nlminb}} optimiser}

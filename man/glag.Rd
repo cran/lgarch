@@ -15,7 +15,7 @@ glag(x, k = 1, pad = TRUE, pad.value = NA)
   \item{x}{a numeric vector or matrix}
   \item{k}{integer equal to the lag (the default is 1)}
   \item{pad}{logical. If TRUE (default), then the lost entries are padded with pad.value. If FALSE, then no padding is undertaken}
-  \item{pad.value}{numeric. The pad-value}
+  \item{pad.value}{the pad-value}
 }
 
 \value{A vector or matrix with the lagged values}

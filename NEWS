@@ -1,0 +1,57 @@
+Main changes to version 0.5 (1 September 2014):
+================================================
+
+- lgarchSim: c.code argument added with default TRUE (i.e. compiled C-code is used for the recursion; this speeds up simulations considerably)
+
+- S3 method summary added for lgarch and mlgarch objects
+
+- lgarch, mlgarch: backcast.values argument removed
+
+- lgarchRecursion1: for improved numerical stability the backcast values of ln(y^2) was changed to the empirical mean. Also, a bug that occurred whenever c.code=FALSE was corrected
+
+Main changes to version 0.4 (1 July 2014):
+==========================================
+
+- mean-correction as estimation-option was added to the lgarch function
+
+- a third estimation method was added to the lgarch function: QML via the centred Chi-squared distribution as instrumental density
+
+- bug in the fitted.lgarch function corrected (the bug induced incorrect fitted values at zero-locations)
+
+- stylistic changes to the documentation
+
+Main changes to version 0.3 (1 June 2014):
+==========================================
+
+- functions and S3 methods for the simulation and estimation of the multivariate CCC-log-GARCH(1,1) model were added
+
+- gdiff function added
+
+- rss.lgarch function changed name to rss
+
+- zoo-related bug corrected in glag 
+
+- glag function: improved further, and the pad argument in the glag function acquired a new default (TRUE)
+
+- minor improvements throughout, and several stylistic changes made to the documentation
+
+
+Main changes to version 0.2 (28 April 2014):
+============================================
+
+- lgarch function: A couple of bugs corrected in the parameter-indexing, which ocurred whenever the garch order argument was set to 0
+
+- glag: Completely rewritten. Now it can also lag matrices, and it gives a "special treatment" to zoo-objects (the indexing is retained)
+
+- function lgarchLogl changed name to lgarchObjective
+
+- argument logl.penalty in lgarch function changed to objective.penalty
+
+- lgarch function: the argument method=c("ml","ls") was added. If method="ml", then estimation is with Gaussian QML via the ARMA representation. If method="ls", then estimation is with least squares via the ARMA representation. Although asymptotically equivalent in most respects, the latter is slightly faster since one parameter less is estimated
+
+- function rss.lgarch added (extract Residual Sum of Squares of ARMA representation) from an lgarch object
+
+- function mlgarchSim added (simulate from a multivariate log-GARCH(1,1))
+
+- function rmnorm added (generate from multivariate normal)
+

@@ -6,6 +6,11 @@ ARMARECURSION1 <- function (iStart, iEnd, phi1, theta1,
     innov = as.double(innov), lny2adj = as.double(lny2adj),
     uadj = as.double(uadj), PACKAGE = "lgarch")
 
+LGARCHSIM <- function (maxpq, nmaxpq, lnsigma2, phi, phisum, innov)
+.C("LGARCHSIM", maxpq = as.integer(maxpq), nmaxpq = as.integer(nmaxpq),
+  lnsigma2 = as.double(lnsigma2), phi = as.double(phi),
+  phisum = as.double(phisum), innov = as.double(innov), PACKAGE = "lgarch")
+
 VARMARECURSION1 <- function (iStart, n, m, mU, mY, mInnov,
     PHI, THETA, mYiszeroadj)
 .C("VARMARECURSION1",  iStart = as.integer(iStart),

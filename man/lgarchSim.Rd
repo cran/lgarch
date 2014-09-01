@@ -10,7 +10,8 @@ Simulate the y series (typically a financial return or the error in a regression
 \usage{
 lgarchSim(n, constant = 0, arch = 0.05, garch = 0.9, xreg = NULL,
   backcast.values = list(lnsigma2 = NULL, lnz2 = NULL, xreg = NULL),
-  check.stability = TRUE, innovations = NULL, verbose = FALSE)
+  check.stability = TRUE, innovations = NULL, verbose = FALSE,
+  c.code=TRUE)
 }
 
 \arguments{
@@ -23,6 +24,7 @@ lgarchSim(n, constant = 0, arch = 0.05, garch = 0.9, xreg = NULL,
   \item{check.stability}{logical. If TRUE (default), then the roots of arch+garch are checked for stability}
   \item{innovations}{Etiher NULL (default) or a vector of length n with the standardised errors (i.e. z). If NULL, then the innovations are normal with mean zero and unit variance}
   \item{verbose}{logical. If FALSE (default), then only the vector y is returned. If TRUE, then a matrix with all the output is returned}
+  \item{c.code}{logical. If TRUE (default), then compiled C-code is used for the recursion (faster)}
 }
 \details{Empty}
 
@@ -49,9 +51,6 @@ head(y)
 
 ##plot the simulated values:
 plot(y)
-
-##simulate from an integrated log-GARCH:
-y <- lgarchSim(500, arch=0.1, garch=0.9)
 
 ##simulate w/conditioning variable:
 x <- rnorm(500)

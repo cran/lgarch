@@ -1,7 +1,8 @@
 lgarchSim <-
 function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   backcast.values=list(lnsigma2=NULL, lnz2=NULL, xreg=NULL),
-  check.stability=TRUE, innovations=NULL, verbose=FALSE)
+  check.stability=TRUE, innovations=NULL, verbose=FALSE,
+  c.code=TRUE)
 {
   #check arguments:
   if(is.null(constant)) constant <- 0
@@ -20,7 +21,6 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   #nmaxpqr <- n+maxpqr
   ####
   #### NOTE: c.code not implemented yet
-  c.code <- FALSE #necessary until c.code implemented
 
   #make phi:
   phi <- c(arch,rep(0,maxpq-arch.p)) + c(garch,rep(0,maxpq-garch.q))
@@ -94,8 +94,8 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   maxpq1 <- maxpq+1
   phisum <- rep(0,nmaxpq)
   if(c.code){
-#    tmp <- LGARCHSIM(maxpq, nmaxpq, lnsigma2, phi, phisum, innov)
-#    lnsigma2 <- tmp$lnsigma2
+    tmp <- LGARCHSIM(maxpq, nmaxpq, lnsigma2, phi, phisum, innov)
+    lnsigma2 <- tmp$lnsigma2
   }else{
     for(i in maxpq1:nmaxpq){
       phisum[i] <- sum(phi*lnsigma2[c(i-1):c(i-maxpq)])
@@ -104,7 +104,6 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   } #end if(c.code)
 
   #output:
-  #OLD: lnsigma2 <- lnsigma2[-I(1:maxpq)] #rm initial vals
   lnsigma2 <- lnsigma2[-c(1:maxpq)] #rm initial vals
   if(verbose){
     sigma <- exp(lnsigma2/2)

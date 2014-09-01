@@ -1,9 +1,8 @@
 mlgarch <-
 function(y, arch=1, garch=1, xreg=NULL,
-  initial.values=NULL, backcast.values=list(lny2=NULL, lnz2=NULL),
-  lower=NULL, upper=NULL, nlminb.control=list(), vcov=TRUE,
-  objective.penalty=NULL, solve.tol=.Machine$double.eps,
-  c.code=TRUE)
+  initial.values=NULL, lower=NULL, upper=NULL,
+  nlminb.control=list(), vcov=TRUE, objective.penalty=NULL,
+  solve.tol=.Machine$double.eps, c.code=TRUE)
 {
   #check/change arguments:
   if(is.null(arch)){ arch <- 0 }

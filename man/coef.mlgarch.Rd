@@ -4,6 +4,7 @@
 \alias{logLik.mlgarch}
 \alias{print.mlgarch}
 \alias{residuals.mlgarch}
+\alias{summary.mlgarch}
 \alias{vcov.mlgarch}
 
 \title{ Extraction methods for 'mlgarch' objects }
@@ -17,6 +18,7 @@ Extraction methods for objects of class 'mlgarch' (i.e. the result of estimating
 \method{logLik}{mlgarch}(object, varma = FALSE, ...)
 \method{print}{mlgarch}(x, varma = FALSE, ...)
 \method{residuals}{mlgarch}(object, varma = FALSE, ...)
+\method{summary}{mlgarch}(object, ...)
 \method{vcov}{mlgarch}(object, varma = FALSE, ...)
 }
 
@@ -36,6 +38,7 @@ Extraction methods for objects of class 'mlgarch' (i.e. the result of estimating
   \item{logLik:}{The value of the log-likelihood (contributions at zeros excluded) at the maximum}
   \item{print:}{Prints the most important parts of the estimation results}
   \item{residuals:}{A \code{\link{zoo}} object (a matrix) with the residuals. If varma = FALSE (default), then the standardised residuals are returned. If varma = TRUE, then the residuals of the VARMA representation is returned}
+  \item{summary:}{A print of the items in the \code{\link{mlgarch}} object}
   \item{vcov:}{The variance-covariance matrix}
 }
 

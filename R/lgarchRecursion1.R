@@ -11,12 +11,11 @@ function(pars, aux)
     innovMean <- mean(innov)
     innov <- c(rep(innovMean, max(1,aux$maxpq)), innov)
   }
-  #yzeroadj <- c(rep(1,1:max(1,aux$maxpq)), aux$yzero)
-  Elny2 <- innovMean/(1-sum(pars[aux$ar.indx]))
+  #Version 0.4: Elny2 <- innovMean/(1-sum(pars[aux$ar.indx]))
   if(aux$mean.correction){
-    lny2adj <- c(rep(Elny2,1:max(1,aux$maxpq)), aux$lny2mc)
+    lny2adj <- c(rep(aux$Elny2,1:max(1,aux$maxpq)), aux$lny2mc)
   }else{
-    lny2adj <- c(rep(Elny2,1:max(1,aux$maxpq)), aux$lny2)
+    lny2adj <- c(rep(aux$Elny2,1:max(1,aux$maxpq)), aux$lny2)
   }
   uadj <- aux$zerosaux
 
@@ -29,9 +28,9 @@ function(pars, aux)
     tmp <- ARMARECURSION1(as.integer(iStart), as.integer(iEnd),
       as.numeric(phi1), as.numeric(theta1), as.numeric(aux$yzeroadj),
       as.numeric(innov), as.numeric(lny2adj), as.numeric(uadj))
-      uadj <- tmp$uadj
+    uadj <- tmp$uadj
   }else{
-    for(i in max(2,aux$maxpq+1):max(aux$nplussMaxpq, aux$n+1)){
+    for(i in max(2,aux$maxpq+1):max(aux$nmaxpq, aux$n+1)){
       imin1 <- i - 1
       if(aux$yzeroadj[i]==0){
         lny2adj[i] <- innov[i] + phi1*lny2adj[imin1] + theta1*uadj[imin1]

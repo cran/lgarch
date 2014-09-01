@@ -1,11 +1,9 @@
 lgarch <-
 function(y, arch=1, garch=1, xreg=NULL,
-  initial.values=NULL,
-  backcast.values=list(lny2=NULL, lnz2=NULL, xreg=NULL),
-  lower=NULL, upper=NULL, nlminb.control=list(),
-  vcov=TRUE, method=c("ls","ml","cex2"), mean.correction=FALSE,
-  objective.penalty=NULL, solve.tol=.Machine$double.eps,
-  c.code=TRUE)
+  initial.values=NULL, lower=NULL, upper=NULL,
+  nlminb.control=list(), vcov=TRUE, method=c("ls","ml","cex2"),
+  mean.correction=FALSE, objective.penalty=NULL,
+  solve.tol=.Machine$double.eps, c.code=TRUE)
 {
   #check/change arguments:
   if(arch < garch) stop("garch order cannot be greater than arch order, since estimation is via the arma representation")

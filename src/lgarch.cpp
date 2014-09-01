@@ -4,7 +4,7 @@ extern "C" {
   void ARMARECURSION1 ( int * iStart, int * iEnd, double * phi1, double * theta1, double * yzeroadj, double * innov, double * lny2adj, double * uadj);
 }
 
-void ARMARECURSION1 ( int * iStart, int * iEnd, double * phi1, double * theta1, double * yzeroadj, double * innov, double * lny2adj, double * uadj) {
+void ARMARECURSION1 ( int * iStart, int * iEnd, double * phi1, double * theta1, double * yzeroadj, double * innov, double * lny2adj, double * uadj){
 
   for (int i=*iStart; i < *iEnd; i++) {
     if(yzeroadj[i]==0){
@@ -13,6 +13,22 @@ void ARMARECURSION1 ( int * iStart, int * iEnd, double * phi1, double * theta1, 
     }else{
       uadj[i] = lny2adj[i] - innov[i] - *phi1*lny2adj[i-1] - *theta1*uadj[i-1];
     }
+  }
+
+}
+
+
+extern "C" {
+  void LGARCHSIM ( int * maxpq, int * nmaxpq, double * lnsigma2, double * phi, double * phisum, double * innov);
+}
+
+void LGARCHSIM ( int * maxpq, int * nmaxpq, double * lnsigma2, double * phi, double * phisum, double * innov) {
+
+  for (int i=*maxpq; i < *nmaxpq; i++) {
+    for (int j=0; j < *maxpq; j++) {
+      phisum[i] = phisum[i] + phi[j] * lnsigma2[i-j-1];
+    }
+    lnsigma2[i] = innov[i] + phisum[i];
   }
 
 }

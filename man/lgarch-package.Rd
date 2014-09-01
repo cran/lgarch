@@ -22,14 +22,14 @@ where the conditioning x-variables can be contemporaneous and/or lagged. The lga
 \tabular{ll}{
 Package: \tab lgarch\cr
 Type: \tab Package\cr
-Version: \tab 0.3\cr
-Date: \tab 2014-06-01\cr
+Version: \tab 0.5\cr
+Date: \tab 2014-09-01\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
 The main functions of the package are: \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}} and \code{\link{mlgarch}}. The first two functions simulate from a univariate and a multivariate log-GARCH model, respectively, whereas the latter two estimate a univariate and a multivariate log-GARCH model, respectively.
 
-The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to each of them: coef, fitted, logLik, print, residuals and vcov. In addition, the function \code{\link{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
+The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to each of them: coef, fitted, logLik, print, residuals, summary and vcov. In addition, the function \code{\link{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
 
 The output produced by the \code{\link{lgarchSim}} and \code{\link{mlgarchSim}} functions, and by the fitted and residuals methods, are of the Z's ordered observations (\code{\link{zoo}}) class, see Zeileis and Grothendieck (2005), and Zeileis, Grothendieck and Ryan (2014). This means a range of time-series and plotting methods are available for these objects.
 }
@@ -49,8 +49,9 @@ Zeileis, A., G. Grothendieck, J.A. Ryan and F. Andrews(2014), 'zoo: S3 Infrastru
 }
 \seealso{
 \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}}, \code{\link{mlgarch}}, \code{\link{coef.lgarch}}, \code{\link{coef.mlgarch}}, \code{\link{fitted.lgarch}}, \cr
-\code{\link{fitted.mlgarch}}, \code{\link{logLik.lgarch}}, \code{\link{logLik.mlgarch}}, \code{\link{print.lgarch}}, \code{\link{print.mlgarch}}, \code{\link{residuals.lgarch}}, \cr
-\code{\link{residuals.mlgarch}}, \code{\link{rss}}, \code{\link{vcov.lgarch}}, \code{\link{vcov.mlgarch}} and \code{\link{zoo}}
+\code{\link{fitted.mlgarch}}, \code{\link{logLik.lgarch}}, \code{\link{logLik.mlgarch}}, \code{\link{print.lgarch}}, \code{\link{print.mlgarch}}, \cr
+\code{\link{residuals.lgarch}}, \code{\link{residuals.mlgarch}}, \code{\link{rss}}, \code{\link{summary.mlgarch}}, \code{\link{summary.mlgarch}}, \code{\link{vcov.lgarch}}, \cr
+\code{\link{vcov.mlgarch}} and \code{\link{zoo}}
 }
 
 \examples{

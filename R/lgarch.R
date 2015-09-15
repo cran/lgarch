@@ -14,20 +14,40 @@ function(y, arch=1, garch=1, xreg=NULL,
     stop("This combination is not possible. Try setting mean.correction=FALSE")
 
   #zoo and xts specific:
-  y <- as.zoo(y)
+  y.name <- deparse(substitute(y))
+  y <- as.zoo(cbind(y))
+  if( is.null(y.name)){ y.name <- colnames(y)[1] }
+  if( y.name[1] =="" ){ y.name <- "y" }
   y <- na.trim(y)
+  y.n <- NROW(y)
   y.index <- index(y)
+  t1 <- y.index[1]
+  t2 <- y.index[y.n]
   y <- coredata(y)
-  if(is.matrix(y)){
-    if(NCOL(y) > 1) stop("Dependent variable not a 1-dimensional matrix")
-     y <- y[,1]
+  if(NCOL(y) > 1){
+    stop("Dependent variable not 1-dimensional")
+  }else{
+    y <- y[,1]
   }
-  y <- as.numeric(y)
 
-  #xreg:
-  if(!is.null(xreg)) xreg <- cbind(coredata(xreg))
+  ##xreg:
+  if(!is.null(xreg)){
+    xreg <- as.zoo(cbind(xreg))
+    xreg.names <- colnames(xreg)
+    if(is.null(xreg.names)){
+      xreg.names <- paste("xreg", 1:NCOL(xreg), sep="")
+    }
+    if(any(xreg.names == "")){
+      missing.colnames <- which(xreg.names == "")
+      for(i in 1:length(missing.colnames)){
+        xreg.names[i] <- paste("xreg", i, sep="")
+      }
+    }
+    xreg <- window(xreg, start=t1, end=t2)
+    xreg <- cbind(coredata(xreg))
+  }
 
-  #begin aux list:
+  ##begin aux list:
   aux <- list()
   aux$method <- method
   aux$y <- y
@@ -192,8 +212,11 @@ function(y, arch=1, garch=1, xreg=NULL,
 
   #xreg, garch, arch and intercept parameters:
   if(aux$xreg.k > 0){
-    namesArma <- c(paste("xreg",1:aux$xreg.k,sep=""), namesArma)
-    namesLgarch <- c(paste("xreg",1:aux$xreg.k,sep=""), namesLgarch)
+    namesArma <- c(xreg.names, namesArma)
+    namesLgarch <- c(xreg.names, namesLgarch)
+    #OLD:
+    #namesArma <- c(paste("xreg",1:aux$xreg.k,sep=""), namesArma)
+    #namesLgarch <- c(paste("xreg",1:aux$xreg.k,sep=""), namesLgarch)
     par.lgarch <- c(est$par[aux$xreg.indx], par.lgarch)
   }
   if(aux$ma > 0){
@@ -230,9 +253,15 @@ function(y, arch=1, garch=1, xreg=NULL,
     colnames(hessian.arma) <- namesArma
     rownames(hessian.arma) <- namesArma
     vcov.arma <- solve(-hessian.arma, tol=solve.tol)
+    if(aux$method=="ls"){
+      vcov.arma <- sigma2u*2*vcov.arma
+    }
     est <- c(list(aux=aux, hessian.arma=hessian.arma,
       vcov.arma=vcov.arma, vcov.lgarch=NULL), est)
     est$vcov.lgarch <- vcov.lgarch(est, arma=FALSE)
+  }else{
+    est <- c(list(aux=aux, hessian.arma=NA,
+      vcov.arma=NA, vcov.lgarch=NA), est)
   }
 
   #out:

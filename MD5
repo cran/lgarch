@@ -1,6 +1,6 @@
-d9a329818e24376c5141ec2df004d978 *DESCRIPTION
-7e1fbc2dcee7c794aa2571ff53c47353 *NAMESPACE
-b61b6bb72704bbd9788a4c9bc631e82c *NEWS
+f0219b44deb634f5ca8529a987b3c824 *DESCRIPTION
+838a8fe3cb63ad0bc48a06ed84d5c03c *NAMESPACE
+aa324abb67dc77ddb364ed51390bc142 *NEWS
 86dfe5828351a24c97a9dce43a469f2e *R/coef.lgarch.R
 098f1c9af51ba0c246621bf60ae6dfa2 *R/coef.mlgarch.R
 23ede5be061ee278c2b7698ec2fadb63 *R/fitted.lgarch.R
@@ -8,10 +8,10 @@ b61b6bb72704bbd9788a4c9bc631e82c *NEWS
 1f93da769821a71cfffbb4bbcce104b1 *R/gdiff.R
 b80f8d961d0b6992d908dd84096f4f3c *R/glag.R
 bd7e7ca4f1243ded15d3947cfd44cca1 *R/lgarch-internal.R
-61d53c6316e88baef87f0262c2d79016 *R/lgarch.R
+497eec0a1304952815318c8ff80d5207 *R/lgarch.R
 d42069125685e5927b01508b52085500 *R/lgarchObjective.R
 6e848cd02b8b6ad6af22a54572233a5b *R/lgarchRecursion1.R
-1ebf98381bd3a52d426855c7723237bc *R/lgarchSim.R
+2f1069e601af9709117f248cf1a06906 *R/lgarchSim.R
 0fac55e89b16838ee19f22bfef5f0d16 *R/logLik.lgarch.R
 db2aafde7601a0be2c8c0adeb9d16c2c *R/logLik.mlgarch.R
 68faed1398806b5a07503bd9b7c81d78 *R/mlgarch.R
@@ -23,8 +23,8 @@ d164b40c0e2bbfba1446a1263a36c3dd *R/print.lgarch.R
 5184828b3804174889da9911153e262e *R/residuals.lgarch.R
 3192fb270cb6a9a066a5f382473b8a1d *R/residuals.mlgarch.R
 487a2879565fa3584bdf58b888283faa *R/rmnorm.R
-adbb08d8b8a7a0c5471604d677741782 *R/rss.R
-262021895af8c307ea6166d594b2dc18 *R/summary.lgarch.R
+a254168ff125ca02b3f9d00b18320c69 *R/rss.R
+bb5ce7be8eaa3da3582794f97c78d1fd *R/summary.lgarch.R
 50ebb8a81cd25dd275e18968147c8644 *R/summary.mlgarch.R
 43bfc5af83a202bee2470476d59bc30d *R/vcov.lgarch.R
 9a6b2e9ca043ad3e3dcadc34d307753b *R/vcov.mlgarch.R
@@ -32,7 +32,7 @@ adbb08d8b8a7a0c5471604d677741782 *R/rss.R
 f99c2078b141c2e48569b9c35b54889e *man/coef.mlgarch.Rd
 5aed38e45e83e1daf953878d5bef6a2e *man/gdiff.Rd
 e54c612e5f3aa8d8b4e3797452c07bbe *man/glag.Rd
-e5644912c5143d10d986cea9a49c7136 *man/lgarch-package.Rd
+51d4e5b66418e502605854a02c25549d *man/lgarch-package.Rd
 283d119c6ed6f936bce3c23befc2d397 *man/lgarch.Rd
 c54d305664fa58e811cfb256356f9486 *man/lgarchObjective.Rd
 7ccd6a8c8086dae7c782bb39a898a924 *man/lgarchSim.Rd

@@ -1,5 +1,6 @@
 useDynLib(lgarch)
 import(zoo)
+importFrom("stats", "cor", "dnorm", "nlminb", "optimHess", "rnorm", "sd", "var", "window")
 export("glag", "gdiff", "lgarchSim", "lgarchRecursion1", "lgarchObjective", "lgarch", "rss", "rmnorm", "mlgarchSim", "mlgarchRecursion1", "mlgarchObjective", "mlgarch")
 S3method("coef", "lgarch")
 S3method("fitted", "lgarch")

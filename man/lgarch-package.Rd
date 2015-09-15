@@ -22,8 +22,8 @@ where the conditioning x-variables can be contemporaneous and/or lagged. The lga
 \tabular{ll}{
 Package: \tab lgarch\cr
 Type: \tab Package\cr
-Version: \tab 0.5\cr
-Date: \tab 2014-09-01\cr
+Version: \tab 0.6-2\cr
+Date: \tab 2015-09-14\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }

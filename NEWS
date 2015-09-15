@@ -1,5 +1,16 @@
+Changes to version 0.6-2 (14 September 2015):
+=============================================
+
+- lgarch:
+
+* Formula for the variance-covariance matrix of the ARMA-representation corrected when method="ls"
+
+* improved column-names handling of X-regressors
+
+* the dates/index of regressor(s), i.e. the xreg argument, is automatically matched with dates/index of the regressand
+
 Main changes to version 0.5 (1 September 2014):
-================================================
+===============================================
 
 - lgarchSim: c.code argument added with default TRUE (i.e. compiled C-code is used for the recursion; this speeds up simulations considerably)
 
@@ -12,11 +23,13 @@ Main changes to version 0.5 (1 September 2014):
 Main changes to version 0.4 (1 July 2014):
 ==========================================
 
-- mean-correction as estimation-option was added to the lgarch function
+- lgarch:
 
-- a third estimation method was added to the lgarch function: QML via the centred Chi-squared distribution as instrumental density
+* mean-correction as estimation-option added
 
-- bug in the fitted.lgarch function corrected (the bug induced incorrect fitted values at zero-locations)
+- a third estimation method was added: QML via the centred Chi-squared distribution as instrumental density
+
+- fitted.lgarch: bug fix (the bug induced incorrect fitted values at zero-locations)
 
 - stylistic changes to the documentation
 
@@ -55,3 +68,7 @@ Main changes to version 0.2 (28 April 2014):
 
 - function rmnorm added (generate from multivariate normal)
 
+Version 0.1 (18 March 2014):
+============================
+
+- All versions until 1.0 should be considered as Beta-versions

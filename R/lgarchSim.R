@@ -29,7 +29,7 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
   if(check.stability){
     roots <- polyroot(c(1,-phi))
     if(any(abs(roots) <= 1)){
-      mssg <- paste("NOTE: The model may not be stable (one or more AR-roots is on or inside the unit circle)")
+      mssg <- paste("NOTE: The log-garch model may not be stable (one or more AR-roots is on or inside the unit circle)")
       print(mssg)
     }
   }
@@ -111,7 +111,7 @@ function(n, constant=0, arch=0.05, garch=0.9, xreg=NULL,
     lny2 <- log(y^2)
     lnz2 <- log(z^2)
     result <- cbind(y, lny2, sigma, lnsigma2, z, lnz2)
-    colnames(result)[3] <- "sd"
+    colnames(result)[3:4] <- c("sd","lnsd2")
   }else{
     sigma <- exp(lnsigma2/2)
     result <- sigma*z

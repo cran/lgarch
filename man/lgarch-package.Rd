@@ -22,39 +22,41 @@ where the conditioning x-variables can be contemporaneous and/or lagged. The lga
 \tabular{ll}{
 Package: \tab lgarch\cr
 Type: \tab Package\cr
-Version: \tab 0.6-2\cr
-Date: \tab 2015-09-14\cr
+Version: \tab 0.7\cr
+Date: \tab 2025-03-25\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
-The main functions of the package are: \code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}} and \code{\link{mlgarch}}. The first two functions simulate from a univariate and a multivariate log-GARCH model, respectively, whereas the latter two estimate a univariate and a multivariate log-GARCH model, respectively.
+The main functions of the package are: \code{\link[lgarch]{lgarchSim}}, \code{\link[lgarch]{mlgarchSim}}, \code{\link[lgarch]{lgarch}} and \code{\link[lgarch]{mlgarch}}. The first two functions simulate from a univariate and a multivariate log-GARCH model, respectively, whereas the latter two estimate a univariate and a multivariate log-GARCH model, respectively.
 
-The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to each of them: coef, fitted, logLik, print, residuals, summary and vcov. In addition, the function \code{\link{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
+The lgarch and mlgarch functions return an object (a list) of class 'lgarch' and 'mlgarch', respectively. In both cases a collection of methods can be applied to each of them: coef, fitted, logLik, print, residuals, summary and vcov. In addition, the function \code{\link[lgarch]{rss}} can be used to extract the Residual Sum of Squares of the estimated ARMA representation from an lgarch object.
 
-The output produced by the \code{\link{lgarchSim}} and \code{\link{mlgarchSim}} functions, and by the fitted and residuals methods, are of the Z's ordered observations (\code{\link{zoo}}) class, see Zeileis and Grothendieck (2005), and Zeileis, Grothendieck and Ryan (2014). This means a range of time-series and plotting methods are available for these objects.
+The output produced by the \code{\link[lgarch]{lgarchSim}} and \code{\link[lgarch]{mlgarchSim}} functions, and by the fitted and residuals methods, are of the Z's ordered observations (\code{\link[zoo]{zoo}}) class, see Zeileis and Grothendieck (2005), and Zeileis, Grothendieck and Ryan (2014). This means a range of time-series and plotting methods are available for these objects.
 }
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
 
 \references{
-Francq, C. and G. Sucarrat (2013), 'An Exponential Chi-Squared QMLE for Log-GARCH Models via the ARMA Representation', MPRA Paper 51783: \url{http://mpra.ub.uni-muenchen.de/51783/} \cr
+C. Francq and G. Sucarrat (2018), 'An Exponential Chi-Squared QMLE for Log-GARCH Models Via the ARMA Representation', Journal of Financial Econometrics 16, pp. 129-154 \doi{https://doi.org/10.1093/jjfinec/nbx032}
 
-Sucarrat, G. and A. Escribano (2013), 'Unbiased QML Estimation of Log-GARCH Models in the Presence of Zero Returns', MPRA Paper 50699: \url{http://mpra.ub.uni-muenchen.de/50699/} \cr
+G. Sucarrat and A. Escribano (2018), 'Estimation of Log-GARCH Models in the Presence of Zero Returns', European Journal of Finance 24, pp. 809-827, \doi{https://doi.org/10.1080/1351847X.2017.1336452}
 
-Sucarrat, G., S. Gronneberg and A. Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
+G. Sucarrat, S. Gronneberg and A. Escribano (2016), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', Computational Statistics and Data Analysis 100, pp. 582-594, \doi{http://dx.doi.org/10.1016/j.csda.2015.12.005}
 
 Zeileis, A. and G. Grothendieck (2005), 'zoo: S3 Infrastructure for Regular and Irregular Time Series', Journal of Statistical Software 14, pp. 1-27 \cr
 
-Zeileis, A., G. Grothendieck, J.A. Ryan and F. Andrews(2014), 'zoo: S3 Infrastructure for Regular and Irregular Time Series (Z's ordered observations)', R package version 1.7-11, http://CRAN.R-project.org/package=zoo/
+Zeileis, A., G. Grothendieck, J.A. Ryan and F. Andrews(2014), 'zoo: S3 Infrastructure for Regular and Irregular Time Series (Z's ordered observations)', R package version 1.7-11, \url{https://CRAN.R-project.org/package=zoo/}
 }
+
 \seealso{
-\code{\link{lgarchSim}}, \code{\link{mlgarchSim}}, \code{\link{lgarch}}, \code{\link{mlgarch}}, \code{\link{coef.lgarch}}, \code{\link{coef.mlgarch}}, \code{\link{fitted.lgarch}}, \cr
-\code{\link{fitted.mlgarch}}, \code{\link{logLik.lgarch}}, \code{\link{logLik.mlgarch}}, \code{\link{print.lgarch}}, \code{\link{print.mlgarch}}, \cr
-\code{\link{residuals.lgarch}}, \code{\link{residuals.mlgarch}}, \code{\link{rss}}, \code{\link{summary.mlgarch}}, \code{\link{summary.mlgarch}}, \code{\link{vcov.lgarch}}, \cr
-\code{\link{vcov.mlgarch}} and \code{\link{zoo}}
+\code{\link[lgarch]{lgarchSim}}, \code{\link[lgarch]{mlgarchSim}}, \code{\link[lgarch]{lgarch}}, \code{\link[lgarch]{mlgarch}}, \code{\link[lgarch]{coef.lgarch}}, \code{\link[lgarch]{coef.mlgarch}}, \code{\link[lgarch]{fitted.lgarch}}, \cr
+\code{\link[lgarch]{fitted.mlgarch}}, \code{\link[lgarch]{logLik.lgarch}}, \code{\link[lgarch]{logLik.mlgarch}}, \code{\link[lgarch]{print.lgarch}}, \code{\link[lgarch]{print.mlgarch}}, \cr
+\code{\link[lgarch]{residuals.lgarch}}, \code{\link[lgarch]{residuals.mlgarch}}, \code{\link[lgarch]{rss}}, \code{\link[lgarch]{summary.lgarch}}, \code{\link{summary.mlgarch}}, \code{\link[lgarch]{vcov.lgarch}}, \cr
+\code{\link[lgarch]{vcov.mlgarch}} and \code{\link[zoo]{zoo}}
 }
 
 \examples{
+
 ##simulate 500 observations w/default parameter values from
 ##a univariate log-garch(1,1):
 set.seed(123)
@@ -90,10 +92,9 @@ plot(zhat)
 myhat <- fitted(mymod, verbose=TRUE)
 plot(myhat)
 
-##simulate 1000 observations from a two-dimensional
-##ccc-log-garch(1,1) w/default parameter values:
+##simulate from a two-dimensional ccc-log-garch(1,1) w/defaults:
 set.seed(123)
-yy <- mlgarchSim(1000)
+yy <- mlgarchSim(2000)
 
 ##estimate a 2-dimensional ccc-log-garch(1,1):
 myymod <- mlgarch(yy)

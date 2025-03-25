@@ -5,7 +5,7 @@
 Random number generation from the multivariate normal distribution
 }
 \description{
-This function is a speed-optimised version of the \code{\link{rmnorm}} function from the mnormt package of Adelchi Azzalini (2013).
+This function is a speed-optimised version of the \code{rmnorm} function from the \strong{mnormt} package of Adelchi Azzalini (2013).
 }
 
 \usage{rmnorm(n, mean = NULL, vcov = 1)}
@@ -18,13 +18,13 @@ This function is a speed-optimised version of the \code{\link{rmnorm}} function 
 
 \details{Empty}
 
-\value{A matrix of n rows}
+\value{A matrix of \code{n} rows}
 
 \references{
-Adelchi Azzalini (2013): 'mnormt: The multivariate normal and t distributions', R package version 1.4-7, \url{http://CRAN.R-project.org/package=mnormt}
+Adelchi Azzalini (2013): 'mnormt: The multivariate normal and t distributions', R package version 1.4-7, \url{https://CRAN.R-project.org/package=mnormt}
 }
 
-\author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
+\author{Genaro Sucarrat, \url{https://www.sucarrat.net/}}
 
 \examples{
 ##generate from univariate standardised normal:

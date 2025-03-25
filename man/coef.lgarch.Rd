@@ -37,19 +37,20 @@ rss(object, ...)
 
 \value{
   \item{coef:}{A numeric vector containing the parameter estimates}
-  \item{fitted:}{A \code{\link{zoo}} object. If verbose = FALSE (default), then the zoo object is a vector containing the fitted conditional standard deviations. If verbose = TRUE, then the zoo object is a matrix containing the conditional standard deviations and additional information}
+  \item{fitted:}{A \code{\link[zoo]{zoo}} object. If \code{verbose = FALSE} (default), then the \code{\link[zoo]{zoo}} object is a vector containing the fitted conditional standard deviations. If \code{verbose = TRUE}, then the \code{\link[zoo]{zoo}} object is a matrix containing the conditional standard deviations and additional information}
   \item{logLik:}{The value of the log-likelihood (contributions at zeros excluded) at the maximum}
   \item{print:}{Prints the most important parts of the estimation results}
-  \item{residuals:}{A \code{\link{zoo}} object with the residuals. If arma = FALSE (default), then the standardised residuals are returned. If arma = TRUE, then the residuals of the ARMA representation is returned}
+  \item{residuals:}{A \code{\link[zoo]{zoo}} object with the residuals. If \code{arma = FALSE} (default), then the standardised residuals are returned. If arma = TRUE, then the residuals of the ARMA representation is returned}
   \item{rss:}{A numeric; the Residual Sum of Squares of the ARMA representation}
-  \item{summary:}{A print of the items in the \code{\link{lgarch}} object}
+  \item{summary:}{A print of the items in the \code{\link[lgarch]{lgarch}} object}
   \item{vcov:}{The variance-covariance matrix}
 }
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
-\seealso{ \code{\link{lgarch}} }
+\seealso{ \code{\link[lgarch]{lgarch}} }
 
 \examples{
+
 ##simulate 500 observations w/default parameter values:
 set.seed(123)
 y <- lgarchSim(500)

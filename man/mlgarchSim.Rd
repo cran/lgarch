@@ -28,24 +28,24 @@ mlgarchSim(n, constant = c(0,0), arch = diag(c(0.1, 0.05)),
 }
 \details{Empty}
 \value{
-A \code{\link{zoo}} matrix with n rows.
+A \code{\link[zoo]{zoo}} matrix with n rows.
 }
 \references{
-Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
+G. Sucarrat, S. Gronneberg and A. Escribano (2016), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', Computational Statistics and Data Analysis 100, pp. 582-594, \doi{http://dx.doi.org/10.1016/j.csda.2015.12.005}
 }
 
-\author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
+\author{Genaro Sucarrat, \url{https://www.sucarrat.net/}}
 
-\seealso{ \code{\link{lgarchSim}}, \code{\link{mlgarch}} and \code{\link{zoo}} }
+\seealso{ \code{\link[lgarch]{lgarchSim}}, \code{\link[lgarch]{mlgarch}} and \code{\link[zoo]{zoo}} }
 \examples{
-##simulate 1000 observations from a multivariate
-##ccc-log-garch(1,1) w/default parameter values:
+
+##simulate from a multivariate ccc-log-garch(1,1) w/defaults:
 set.seed(123)
-y <- mlgarchSim(1000)
+y <- mlgarchSim(500)
 
 ##simulate the same series, but with more output:
 set.seed(123)
-y <- mlgarchSim(1000, verbose=TRUE)
+y <- mlgarchSim(500, verbose=TRUE)
 head(y)
 
 ##plot the simulated values:

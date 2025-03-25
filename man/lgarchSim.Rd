@@ -29,17 +29,18 @@ lgarchSim(n, constant = 0, arch = 0.05, garch = 0.9, xreg = NULL,
 \details{Empty}
 
 \value{
-A \code{\link{zoo}} vector of length n if verbose = FALSE (default), or a \code{\link{zoo}} matrix with n rows if verbose = TRUE.
+A \code{\link[zoo]{zoo}} vector of length \code{n} if \code{verbose = FALSE} (default), or a \code{\link[zoo]{zoo}} matrix with \code{n} rows if \code{verbose = TRUE}.
 }
 
 \references{
-Sucarrat, Gronneberg and Escribano (2013), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', MPRA Paper 49344: \url{http://mpra.ub.uni-muenchen.de/49344/} \cr
+G. Sucarrat, S. Gronneberg and A. Escribano (2016), 'Estimation and Inference in Univariate and Multivariate Log-GARCH-X Models When the Conditional Density is Unknown', Computational Statistics and Data Analysis 100, pp. 582-594, \doi{http://dx.doi.org/10.1016/j.csda.2015.12.005}
 }
 
-\author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
+\author{Genaro Sucarrat, \url{https://www.sucarrat.net/}}
 
-\seealso{ \code{\link{mlgarchSim}}, \code{\link{lgarch}}, \code{\link{mlgarch}} and \code{\link{zoo}} }
+\seealso{ \code{\link[lgarch]{mlgarchSim}}, \code{\link[lgarch]{lgarch}}, \code{\link[lgarch]{mlgarch}} and \code{\link[zoo]{zoo}} }
 \examples{
+
 ##simulate 500 observations w/default parameter values:
 set.seed(123)
 y <- lgarchSim(500)

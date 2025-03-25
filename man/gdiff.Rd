@@ -1,10 +1,10 @@
 \name{gdiff}
 \alias{gdiff}
 
-\title{ Difference a vector or a matrix, with special treatment of zoo objects}
+\title{ Difference a vector or a matrix, with special treatment of \code{\link[zoo]{zoo}} objects}
 
 \description{
-Similar to the \code{\link{diff}} function from the base package, but gdiff enables padding (e.g. NAs or 0s) of the lost entries. Contrary to the \code{\link{diff}} function in the base package, however, the default in gdiff is to pad (with NAs). The gdiff function is particularly suited for zoo objects, since their indexing is retained
+Similar to the \code{\link[base]{diff}} function from the base package, but \code{gdiff} enables padding (e.g. NAs or 0s) of the lost entries. Contrary to the \code{\link[base]{diff}} function in the base package, however, the default in gdiff is to pad (with NAs). The gdiff function is particularly suited for \code{\link[zoo]{zoo}} objects, since their indexing is retained
 }
 
 \usage{
@@ -25,7 +25,7 @@ gdiff(x, lag = 1, pad = TRUE, pad.value = NA)
 \note{Empty}
 
 \seealso{
-\code{\link{diff}}, \code{\link{glag}}, \code{\link{lag}}
+\code{\link[base]{diff}}, \code{\link[lgarch]{glag}}, \code{\link[stats]{lag}}
 }
 
 \examples{

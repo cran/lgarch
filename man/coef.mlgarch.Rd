@@ -34,21 +34,22 @@ Extraction methods for objects of class 'mlgarch' (i.e. the result of estimating
 
 \value{
   \item{coef:}{A numeric vector containing the parameter estimates}
-  \item{fitted:}{A \code{\link{zoo}} object (a matrix). If verbose = FALSE (default), then the zoo object contains the fitted conditional standard deviations of each equation. If verbose = TRUE, then the zoo object also contains additional information}
+  \item{fitted:}{A \code{\link[zoo]{zoo}} object (a matrix). If verbose = FALSE (default), then the \code{\link[zoo]{zoo}} object contains the fitted conditional standard deviations of each equation. If verbose = TRUE, then the \code{\link[zoo]{zoo}} object also contains additional information}
   \item{logLik:}{The value of the log-likelihood (contributions at zeros excluded) at the maximum}
   \item{print:}{Prints the most important parts of the estimation results}
-  \item{residuals:}{A \code{\link{zoo}} object (a matrix) with the residuals. If varma = FALSE (default), then the standardised residuals are returned. If varma = TRUE, then the residuals of the VARMA representation is returned}
-  \item{summary:}{A print of the items in the \code{\link{mlgarch}} object}
+  \item{residuals:}{A \code{\link[zoo]{zoo}} object (a matrix) with the residuals. If varma = FALSE (default), then the standardised residuals are returned. If varma = TRUE, then the residuals of the VARMA representation is returned}
+  \item{summary:}{A print of the items in the \code{\link[lgarch]{mlgarch}} object}
   \item{vcov:}{The variance-covariance matrix}
 }
 
 \author{Genaro Sucarrat, \url{http://www.sucarrat.net/}}
-\seealso{ \code{\link{mlgarch}} }
+\seealso{ \code{\link[lgarch]{mlgarch}} }
 
 \examples{
-##simulate 1000 observations from 2-dimensional model w/default parameter values:
+
+##simulate from 2-dimensional model w/default parameter values:
 set.seed(123)
-y <- mlgarchSim(1000)
+y <- mlgarchSim(2000)
 
 ##estimate a 2-dimensional ccc-log-garch(1,1):
 mymod <- mlgarch(y)
@@ -66,7 +67,8 @@ logLik(mymod)
 logLik(mymod, varma=TRUE)
 
 ##extract variance-covariance matrix:
-vcov(mymod)
+vcov(mymod)             #work in progress!
+vcov(mymod, varma=TRUE)
 
 ##extract and plot the fitted conditional standard deviations:
 sdhat <- fitted(mymod)
